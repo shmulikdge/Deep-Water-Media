@@ -22,6 +22,20 @@ export const translations = {
     "tour.jumps": "All jumps (max 2m) are optional; rope descent always available",
     "tour.bring": "What to bring: Only dry clothes for after — all gear provided (wetsuit, helmet, harness, shoes)",
     "tour.book": "Book This Tour",
+
+    "glance.title": "At a Glance",
+    "glance.subtitle": "Everything you need, nothing you don't.",
+    "glance.lunch": "Traditional Lunch",
+    "glance.equipment": "Full Equipment",
+    "glance.equipmentSub": "Wetsuit, helmet, harness & shoes",
+    "glance.insurance": "Professional Insurance",
+    "glance.insuranceSub": "Fully covered throughout",
+    "glance.gopro": "GoPro Photos & Videos",
+    "glance.goproSub": "Delivered via Google Drive & Dropbox",
+    "glance.age": "Min Age: 8 Years",
+    "glance.ageSub": "Safe for the whole family",
+    "glance.bring": "Dry clothes for after",
+    "glance.bringLabel": "What to Bring",
     
     "about.title": "Who We Are",
     "about.exp": "5 Years Experience",
@@ -39,6 +53,7 @@ export const translations = {
     "location.title": "Location",
     "location.meeting": "Meeting point near Nevidio Canyon, Montenegro",
     "location.pickup": "Organized pick-up available on request",
+    "location.openMaps": "Open in Google Maps",
     
     "form.title": "Book Your Jump",
     "form.name": "Full Name",
@@ -50,6 +65,7 @@ export const translations = {
     "form.submit": "Book via WhatsApp",
     
     "footer.rights": "All rights reserved.",
+    "footer.followUs": "Follow Us",
     
     "whatsapp.template": "Hello! I'd like to book a canyoning tour.\nName: {name}\nDate: {date}\nGuests: {guests}\nPhone: {phone}"
   },
@@ -74,6 +90,20 @@ export const translations = {
     "tour.jumps": "כל הקפיצות (עד 2 מטר) הן בגדר רשות; ירידה בחבל תמיד אפשרית",
     "tour.bring": "מה להביא: רק בגדים יבשים לאחרי - כל הציוד מסופק (חליפת צלילה, קסדה, רתמה, נעליים)",
     "tour.book": "הזמן סיור זה",
+
+    "glance.title": "במבט אחד",
+    "glance.subtitle": "כל מה שצריך, כלום מיותר.",
+    "glance.lunch": "ארוחת צהריים מסורתית",
+    "glance.equipment": "ציוד מלא",
+    "glance.equipmentSub": "חליפת צלילה, קסדה, רתמה ונעליים",
+    "glance.insurance": "ביטוח מקצועי",
+    "glance.insuranceSub": "כיסוי מלא לאורך כל הסיור",
+    "glance.gopro": "תמונות וסרטוני GoPro",
+    "glance.goproSub": "נשלחים דרך Google Drive ו-Dropbox",
+    "glance.age": "גיל מינימלי: 8 שנים",
+    "glance.ageSub": "בטוח לכל המשפחה",
+    "glance.bring": "בגדים יבשים להחלפה",
+    "glance.bringLabel": "מה להביא",
     
     "about.title": "מי אנחנו",
     "about.exp": "5 שנות ניסיון",
@@ -91,6 +121,7 @@ export const translations = {
     "location.title": "מיקום",
     "location.meeting": "נקודת מפגש ליד קניון נבידיו, מונטנגרו",
     "location.pickup": "איסוף מאורגן זמין על פי בקשה",
+    "location.openMaps": "פתח במפות גוגל",
     
     "form.title": "הזמן את הקפיצה שלך",
     "form.name": "שם מלא",
@@ -102,6 +133,7 @@ export const translations = {
     "form.submit": "הזמן דרך WhatsApp",
     
     "footer.rights": "כל הזכויות שמורות.",
+    "footer.followUs": "עקבו אחרינו",
     
     "whatsapp.template": "שלום! ברצוני להזמין סיור קניונינג.\nשם: {name}\nתאריך: {date}\nאורחים: {guests}\nטלפון: {phone}"
   },
@@ -126,6 +158,20 @@ export const translations = {
     "tour.jumps": "Svi skokovi (max 2m) su opcioni; spuštanje užetom uvijek dostupno",
     "tour.bring": "Šta ponijeti: Samo suvu odjeću za poslije — sva oprema obezbijeđena (odijelo, kaciga, pojas, cipele)",
     "tour.book": "Rezerviši Ovu Turu",
+
+    "glance.title": "Na Pogled",
+    "glance.subtitle": "Sve što treba, ništa suvišno.",
+    "glance.lunch": "Tradicionalni Ručak",
+    "glance.equipment": "Kompletna Oprema",
+    "glance.equipmentSub": "Odijelo, kaciga, pojas i cipele",
+    "glance.insurance": "Profesionalno Osiguranje",
+    "glance.insuranceSub": "Potpuno pokriveni tokom ture",
+    "glance.gopro": "GoPro Slike i Video",
+    "glance.goproSub": "Dostavljeno putem Google Drive i Dropbox",
+    "glance.age": "Min Godina: 8",
+    "glance.ageSub": "Bezbijedno za cijelu porodicu",
+    "glance.bring": "Suva odjeća za poslije",
+    "glance.bringLabel": "Šta Ponijeti",
     
     "about.title": "Ko Smo Mi",
     "about.exp": "5 Godina Iskustva",
@@ -143,6 +189,7 @@ export const translations = {
     "location.title": "Lokacija",
     "location.meeting": "Mjesto sastanka blizu kanjona Nevidio, Crna Gora",
     "location.pickup": "Organizovan prevoz dostupan na zahtjev",
+    "location.openMaps": "Otvori u Google Mapama",
     
     "form.title": "Rezerviši Skok",
     "form.name": "Puno Ime",
@@ -154,6 +201,7 @@ export const translations = {
     "form.submit": "Rezerviši preko WhatsApp-a",
     
     "footer.rights": "Sva prava zadržana.",
+    "footer.followUs": "Pratite Nas",
     
     "whatsapp.template": "Zdravo! Želim da rezervišem kanjoning turu.\nIme: {name}\nDatum: {date}\nGosti: {guests}\nTelefon: {phone}"
   }

@@ -1,0 +1,48 @@
+מעולה, הלינק ששלחת הוא התחלה מצוינת, אבל כדי להפוך אותו לאתר "פרימיום" שמוכר ומעניק ביטחון ללקוחות, אנחנו צריכים להכניס את כל הדיוקים הטכניים והעיצוביים שציינת עכשיו.
+
+הנה הפרומפט המעודכן והמפורט שאתה צריך להריץ ב-Replit Agent כדי לסגור את כל הפינות האלו:
+
+"Please update the current website for Deep Waters Montenegro with the following critical improvements:
+
+1. SOCIAL MEDIA & CONTACT INTEGRATION:
+
+Floating WhatsApp Button: Add a persistent green WhatsApp button (fixed at the bottom corner). It should link to: https://wa.me/38268889498.
+
+Social Links: Add clear icons/buttons in the footer and contact section for:
+
+Facebook: https://www.facebook.com/profile.php?id=61589125478449
+
+Instagram: https://www.instagram.com/deepwaters.me
+
+Cloud Icons: In the 'What's Included' section, add icons for Google Drive and Dropbox to indicate where guests receive their professional GoPro photos and videos.
+
+2. HOME PAGE ENHANCEMENTS:
+
+Logo Link: Fix the 'Deep Waters' logo/text so that clicking it always returns the user to the top of the Home Page.
+
+Google Maps Integration: Embed a Google Maps section on the Home Page showing the meeting point near Nevidio Canyon. Ensure it has a 'Open in Google Maps' button.
+
+3. VISUAL INFOGRAPHIC (What's Included & Requirements):
+
+Create a clean 'At a Glance' section using Icons for each point:
+
+🥪 Traditional Lunch (Use a sandwich/meal icon).
+
+🤿 Full Equipment (Use a wetsuit/clothing icon).
+
+🛡️ Professional Insurance (Use a shield icon).
+
+📸 GoPro Photos/Videos (Use a camera icon).
+
+🔞 Age Limit: Clearly state 'Minimum 8 years old'.
+
+👕 What to bring: Use an icon to show 'Dry clothes for after'.
+
+4. SMOOTH NAVIGATION & INTERACTION:
+
+Navigation Logic: Fix the Menu buttons (About Us, Gallery, Tours). When clicked, the page should smoothly scroll to that specific section on the home page (Single Page Application style).
+
+Transitions: Ensure all sections have smooth fade-in animations as the user scrolls down.
+
+5. CONTENT RECAP:
+Ensure all 3 languages (EN, HE, ME) are updated with this new content. Specifically, make sure the Hebrew (RTL) layout remains perfectly aligned with the new icons and maps."
