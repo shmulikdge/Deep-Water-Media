@@ -1,0 +1,51 @@
+Project: Deep Waters Montenegro - Ultimate Multilingual Canyoning Website
+
+1. Technical Architecture (Vercel & Cursor Ready):
+
+Tech Stack: Next.js (App Router), TypeScript, Tailwind CSS, Framer Motion (for smooth transitions).
+
+Multilingual Support (i18n): Support English, Hebrew (RTL), and Montenegrin.
+
+Data Handling: Use a central translations.ts file for all UI and content.
+
+Folder Structure: Source code MUST be in /src. Use relative paths for all assets to ensure a smooth migration to Cursor.
+
+2. Design & Experience:
+
+Aesthetic: Modern "Adventure/Nature" style. Colors: Ivory (#F9F5F1), Deep Forest Green (#1B3022), Slate Earth (#2D2D2D).
+
+Interactions: Implement smooth scroll-triggered animations (fade-ins, parallax effects) for a premium feel.
+
+Hero Section: Full-screen background for a video (upload placeholder for now). Overlay a strong title and CTA.
+
+3. Site Content (Based on Client Data):
+
+Nevidio Canyon Tour:
+
+Price: 120€ (Fixed). Highlight: "Price includes Professional Insurance & GoPro Photos/Videos".
+
+Quick Stats: 3-5 hours, Medium/Challenging, Min age: 8, Max weight: 120kg.
+
+Safety Details: Basic swimming recommended (not mandatory). All jumps (max 2m) are optional; rope descent (abseiling) always available.
+
+What to bring: Only dry clothes for after. All gear (wetsuit, helmet, harness, shoes) provided.
+
+About Us: 5 years experience, licensed guides, small groups. Note: Hebrew-speaking friendly.
+
+Policies: 48h free cancellation. Bad weather: Reschedule or full refund.
+
+Location: Meeting point near Nevidio Canyon. Organized pick-up available on request.
+
+4. Advanced Features:
+
+Smart Booking Form: Capture Name, Date, Guests, Phone.
+
+WhatsApp Automation: On submit, generate a pre-filled WhatsApp message to +382 68 889 498 with the user's booking details in their chosen language.
+
+Dynamic Assets: Create a public/assets folder. The code should expect: hero-video.mp4, gallery-1.jpg, logo.png.
+
+5. Mobile & Optimization:
+
+100% responsive. Large, touch-friendly buttons.
+
+Fast loading images using Next.js Image component with object-fit: cover
