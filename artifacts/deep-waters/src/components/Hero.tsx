@@ -1,14 +1,23 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useLanguage } from "../lib/LanguageContext";
 import { Button } from "./ui/button";
 import { Link } from "wouter";
+import { Skeleton } from "./ui/skeleton";
 import heroVideo from "@assets/river_1778693481895.mp4";
 
 export function Hero() {
   const { t } = useLanguage();
+  const [videoReady, setVideoReady] = useState(false);
 
   return (
-    <section className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden">
+    <section className="relative h-[100dvh] w-full flex items-center justify-center overflow-hidden bg-card">
+      {!videoReady && (
+        <div className="absolute inset-0 z-0">
+          <Skeleton className="w-full h-full bg-gradient-to-br from-card via-background to-card animate-pulse" />
+        </div>
+      )}
+
       <div className="absolute inset-0 w-full h-full">
         <div className="absolute inset-0 bg-black/60 z-10" />
         <video
@@ -16,7 +25,11 @@ export function Hero() {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover"
+          onCanPlay={() => setVideoReady(true)}
+          onLoadedData={() => setVideoReady(true)}
+          className={`w-full h-full object-cover transition-opacity duration-700 ${
+            videoReady ? "opacity-100" : "opacity-0"
+          }`}
         >
           <source src={heroVideo} type="video/mp4" />
         </video>

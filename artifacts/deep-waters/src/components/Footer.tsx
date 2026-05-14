@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { useLanguage } from "../lib/LanguageContext";
 import logo from "@assets/deep_water_logo_1778693462993.jpg";
 
@@ -24,19 +25,20 @@ export function Footer() {
   const { t, isRtl } = useLanguage();
 
   return (
-    <footer className="bg-card py-12 border-t border-white/5">
+    <footer className="bg-card py-14 border-t border-white/5" dir={isRtl ? "rtl" : "ltr"}>
       <div className="container mx-auto px-4 flex flex-col items-center gap-8">
-        <a
-          href="#"
-          onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           data-testid="link-footer-logo"
+          className="focus:outline-none"
         >
           <img
             src={logo}
             alt="Deep Waters Montenegro"
             className="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all"
           />
-        </a>
+        </button>
 
         <div className="flex flex-col items-center gap-3">
           <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
@@ -66,6 +68,32 @@ export function Footer() {
               <span className="text-sm font-medium">Instagram</span>
             </a>
           </div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground border-t border-white/5 pt-6 w-full max-w-md">
+          <Link
+            href="/privacy-policy"
+            data-testid="link-footer-privacy"
+            className="hover:text-primary transition-colors"
+          >
+            {t("footer.privacy")}
+          </Link>
+          <span className="text-white/10">•</span>
+          <Link
+            href="/terms"
+            data-testid="link-footer-terms"
+            className="hover:text-primary transition-colors"
+          >
+            {t("footer.terms")}
+          </Link>
+          <span className="text-white/10">•</span>
+          <Link
+            href="/contact"
+            data-testid="link-footer-contact"
+            className="hover:text-primary transition-colors"
+          >
+            {t("nav.contact")}
+          </Link>
         </div>
 
         <div className="text-center text-muted-foreground text-sm">

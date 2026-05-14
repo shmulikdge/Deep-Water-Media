@@ -39,20 +39,29 @@ function LanguageSwitcher({ size = "sm" }: { size?: "sm" | "md" }) {
 
 export function Navigation() {
   const { t, isRtl } = useLanguage();
-  const [location] = useLocation();
+  const [location, navigate] = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const goHome = () => {
+    if (location === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate("/");
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-        <Link
-          href="/"
+        <button
+          type="button"
+          onClick={goHome}
           data-testid="btn-logo-home"
           className="flex items-center gap-3 focus:outline-none shrink-0"
         >
           <img src={logo} alt="Deep Waters Montenegro" className="h-12 w-auto object-contain" />
           <span className="font-heading text-xl tracking-widest hidden lg:block">Deep Waters</span>
-        </Link>
+        </button>
 
         <div className={`hidden lg:flex items-center gap-6 ${isRtl ? "flex-row-reverse" : ""}`}>
           <div className={`flex gap-5 ${isRtl ? "flex-row-reverse" : ""}`}>

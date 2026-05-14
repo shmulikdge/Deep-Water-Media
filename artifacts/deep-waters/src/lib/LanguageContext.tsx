@@ -10,8 +10,43 @@ type LanguageContextType = {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
+const STORAGE_KEY = "dw_lang";
+const VALID: Language[] = ["en", "he", "me"];
+
+function isValid(value: string | null): value is Language {
+  return value !== null && (VALID as string[]).includes(value);
+}
+
+function getInitialLanguage(): Language {
+  if (typeof window === "undefined") return "en";
+  try {
+    const fromUrl = new URLSearchParams(window.location.search).get("lang");
+    if (isValid(fromUrl)) return fromUrl;
+    const fromStorage = localStorage.getItem(STORAGE_KEY);
+    if (isValid(fromStorage)) return fromStorage;
+    const browser = (navigator.language || "en").slice(0, 2).toLowerCase();
+    if (browser === "he") return "he";
+    if (browser === "sr" || browser === "me" || browser === "hr" || browser === "bs") return "me";
+  } catch {
+    // ignore
+  }
+  return "en";
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>("en");
+  const [language, setLanguageState] = useState<Language>(getInitialLanguage);
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", lang);
+      window.history.replaceState({}, "", url.toString());
+    } catch {
+      // ignore
+    }
+  };
 
   useEffect(() => {
     const dir = language === "he" ? "rtl" : "ltr";

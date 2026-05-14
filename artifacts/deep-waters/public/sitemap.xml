@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://deepwaters.me/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://deepwaters.me/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deepwaters.me/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://deepwaters.me/?lang=he" />
+    <xhtml:link rel="alternate" hreflang="me" href="https://deepwaters.me/?lang=me" />
+  </url>
+  <url>
+    <loc>https://deepwaters.me/tour</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://deepwaters.me/tour" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deepwaters.me/tour?lang=en" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://deepwaters.me/tour?lang=he" />
+    <xhtml:link rel="alternate" hreflang="me" href="https://deepwaters.me/tour?lang=me" />
+  </url>
+  <url>
+    <loc>https://deepwaters.me/gallery</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://deepwaters.me/gallery" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deepwaters.me/gallery?lang=en" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://deepwaters.me/gallery?lang=he" />
+    <xhtml:link rel="alternate" hreflang="me" href="https://deepwaters.me/gallery?lang=me" />
+  </url>
+  <url>
+    <loc>https://deepwaters.me/guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://deepwaters.me/guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deepwaters.me/guide?lang=en" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://deepwaters.me/guide?lang=he" />
+    <xhtml:link rel="alternate" hreflang="me" href="https://deepwaters.me/guide?lang=me" />
+  </url>
+  <url>
+    <loc>https://deepwaters.me/about</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://deepwaters.me/about" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deepwaters.me/about?lang=en" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://deepwaters.me/about?lang=he" />
+    <xhtml:link rel="alternate" hreflang="me" href="https://deepwaters.me/about?lang=me" />
+  </url>
+  <url>
+    <loc>https://deepwaters.me/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://deepwaters.me/contact" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deepwaters.me/contact?lang=en" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://deepwaters.me/contact?lang=he" />
+    <xhtml:link rel="alternate" hreflang="me" href="https://deepwaters.me/contact?lang=me" />
+  </url>
+  <url>
+    <loc>https://deepwaters.me/privacy-policy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://deepwaters.me/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deepwaters.me/privacy-policy?lang=en" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://deepwaters.me/privacy-policy?lang=he" />
+    <xhtml:link rel="alternate" hreflang="me" href="https://deepwaters.me/privacy-policy?lang=me" />
+  </url>
+  <url>
+    <loc>https://deepwaters.me/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://deepwaters.me/terms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://deepwaters.me/terms?lang=en" />
+    <xhtml:link rel="alternate" hreflang="he" href="https://deepwaters.me/terms?lang=he" />
+    <xhtml:link rel="alternate" hreflang="me" href="https://deepwaters.me/terms?lang=me" />
+  </url>
+</urlset>
