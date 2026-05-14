@@ -3,6 +3,8 @@ import { useLanguage } from "../lib/LanguageContext";
 import { PageLayout } from "../components/PageLayout";
 import { BookingForm } from "../components/BookingForm";
 import { MapSection } from "../components/MapSection";
+import { WeatherWidget } from "../components/WeatherWidget";
+import { useSeo } from "../lib/seo";
 
 const WHATSAPP_URL = "https://wa.me/38268889498";
 const FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61589125478449";
@@ -35,6 +37,7 @@ function WhatsAppIcon() {
 
 export default function ContactPage() {
   const { t, isRtl } = useLanguage();
+  useSeo(t("contact.pageTitle"), t("contact.pageDesc"));
 
   const socialLinks = [
     {
@@ -66,39 +69,42 @@ export default function ContactPage() {
   return (
     <PageLayout title={t("contact.pageTitle")}>
       <section className="py-20 bg-background">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl font-heading mb-8 text-muted-foreground/70 uppercase tracking-widest">
-              {t("contact.socialTitle")}
-            </h2>
-            <div className={`grid sm:grid-cols-3 gap-4 ${isRtl ? "direction-rtl" : ""}`}>
-              {socialLinks.map((link) => (
-                <motion.a
-                  key={link.label}
-                  href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  data-testid={`link-contact-${link.label.toLowerCase()}`}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.3 }}
-                  className={`flex flex-col items-center gap-3 p-8 border border-white/10 text-center transition-all duration-300 ${link.color} ${link.bg}`}
-                >
-                  <span className="text-muted-foreground group-hover:text-inherit transition-colors">
-                    {link.icon}
-                  </span>
-                  <span className="font-heading text-2xl tracking-wide">{link.label}</span>
-                  <span className="text-xs text-muted-foreground">{link.sub}</span>
-                </motion.a>
-              ))}
+        <div className="container mx-auto px-4 max-w-5xl">
+          <div className="grid lg:grid-cols-3 gap-8 mb-16 items-start">
+            <div className="lg:col-span-2">
+              <motion.h2
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-3xl md:text-4xl font-heading mb-8 text-muted-foreground/70 uppercase tracking-widest"
+              >
+                {t("contact.socialTitle")}
+              </motion.h2>
+              <div className={`grid sm:grid-cols-3 gap-4 ${isRtl ? "direction-rtl" : ""}`}>
+                {socialLinks.map((link) => (
+                  <motion.a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    data-testid={`link-contact-${link.label.toLowerCase()}`}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    whileHover={{ y: -4 }}
+                    transition={{ duration: 0.3 }}
+                    className={`flex flex-col items-center gap-3 p-8 border border-white/10 text-center transition-all duration-300 ${link.color} ${link.bg}`}
+                  >
+                    <span className="text-muted-foreground transition-colors">{link.icon}</span>
+                    <span className="font-heading text-2xl tracking-wide">{link.label}</span>
+                    <span className="text-xs text-muted-foreground">{link.sub}</span>
+                  </motion.a>
+                ))}
+              </div>
             </div>
-          </motion.div>
+
+            <div className="lg:col-span-1">
+              <WeatherWidget />
+            </div>
+          </div>
         </div>
       </section>
 

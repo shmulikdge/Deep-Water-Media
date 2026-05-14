@@ -3,9 +3,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { motion } from "framer-motion";
 import { useLanguage } from "../lib/LanguageContext";
+import { useToast } from "@/hooks/use-toast";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { ShieldCheck } from "lucide-react";
+import { checkRateLimit } from "../lib/rateLimiter";
+import { getRecaptchaToken, isRecaptchaConfigured } from "../lib/recaptcha";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -16,6 +20,7 @@ const formSchema = z.object({
 
 export function BookingForm() {
   const { t, isRtl } = useLanguage();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -27,7 +32,21 @@ export function BookingForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const limit = checkRateLimit();
+    if (!limit.ok) {
+      toast({
+        title: t("form.rateLimited"),
+        description: `${limit.retryInSec}s`,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (isRecaptchaConfigured()) {
+      await getRecaptchaToken("booking_submit");
+    }
+
     let template = t("whatsapp.template");
     template = template.replace("{name}", values.name);
     template = template.replace("{date}", values.date);
@@ -35,13 +54,20 @@ export function BookingForm() {
     template = template.replace("{phone}", values.phone);
 
     const encoded = encodeURIComponent(template);
-    window.open(`https://wa.me/38268889498?text=${encoded}`, '_blank');
+    toast({ title: t("form.success") });
+    window.open(`https://wa.me/38268889498?text=${encoded}`, "_blank");
   };
 
   return (
     <section id="book" className="py-24 bg-card border-y border-white/5 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)', backgroundSize: '40px 40px' }} />
-      
+      <div
+        className="absolute inset-0 opacity-10 pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)",
+          backgroundSize: "40px 40px",
+        }}
+      />
+
       <div className="container mx-auto px-4 max-w-2xl relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -60,16 +86,26 @@ export function BookingForm() {
         >
           <div className="bg-background/80 backdrop-blur-sm p-8 border border-white/10 shadow-2xl">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" dir={isRtl ? "rtl" : "ltr"}>
-                
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-6"
+                dir={isRtl ? "rtl" : "ltr"}
+              >
                 <FormField
                   control={form.control}
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-muted-foreground uppercase tracking-wider text-xs">{t("form.name")}</FormLabel>
+                      <FormLabel className="text-muted-foreground uppercase tracking-wider text-xs">
+                        {t("form.name")}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder={t("form.namePlaceholder")} className="bg-card/50 border-white/10 rounded-none h-12" {...field} />
+                        <Input
+                          placeholder={t("form.namePlaceholder")}
+                          className="bg-card/50 border-white/10 rounded-none h-12"
+                          data-testid="input-name"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -82,9 +118,16 @@ export function BookingForm() {
                     name="date"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-muted-foreground uppercase tracking-wider text-xs">{t("form.date")}</FormLabel>
+                        <FormLabel className="text-muted-foreground uppercase tracking-wider text-xs">
+                          {t("form.date")}
+                        </FormLabel>
                         <FormControl>
-                          <Input type="date" className="bg-card/50 border-white/10 rounded-none h-12" {...field} />
+                          <Input
+                            type="date"
+                            className="bg-card/50 border-white/10 rounded-none h-12"
+                            data-testid="input-date"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -96,9 +139,17 @@ export function BookingForm() {
                     name="guests"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-muted-foreground uppercase tracking-wider text-xs">{t("form.guests")}</FormLabel>
+                        <FormLabel className="text-muted-foreground uppercase tracking-wider text-xs">
+                          {t("form.guests")}
+                        </FormLabel>
                         <FormControl>
-                          <Input type="number" min={1} className="bg-card/50 border-white/10 rounded-none h-12" {...field} />
+                          <Input
+                            type="number"
+                            min={1}
+                            className="bg-card/50 border-white/10 rounded-none h-12"
+                            data-testid="input-guests"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -111,18 +162,36 @@ export function BookingForm() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-muted-foreground uppercase tracking-wider text-xs">{t("form.phone")}</FormLabel>
+                      <FormLabel className="text-muted-foreground uppercase tracking-wider text-xs">
+                        {t("form.phone")}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder={t("form.phonePlaceholder")} type="tel" className="bg-card/50 border-white/10 rounded-none h-12" {...field} />
+                        <Input
+                          placeholder={t("form.phonePlaceholder")}
+                          type="tel"
+                          className="bg-card/50 border-white/10 rounded-none h-12"
+                          data-testid="input-phone"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <Button type="submit" className="w-full h-14 rounded-none font-heading text-xl tracking-widest bg-primary hover:bg-primary/90 text-primary-foreground" data-testid="btn-submit-booking">
+                <Button
+                  type="submit"
+                  disabled={form.formState.isSubmitting}
+                  className="w-full h-14 rounded-none font-heading text-xl tracking-widest bg-primary hover:bg-primary/90 text-primary-foreground"
+                  data-testid="btn-submit-booking"
+                >
                   {t("form.submit")}
                 </Button>
+
+                <p className="flex items-center justify-center gap-2 text-xs text-muted-foreground/70 pt-2">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  {t("form.protectedNote")}
+                </p>
               </form>
             </Form>
           </div>

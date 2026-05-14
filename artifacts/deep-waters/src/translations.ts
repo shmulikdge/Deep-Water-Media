@@ -5,6 +5,7 @@ export const translations = {
     "nav.tours": "The Tour",
     "nav.about": "About Us",
     "nav.gallery": "Gallery",
+    "nav.guide": "Guide",
     "nav.contact": "Contact",
     "nav.book": "Book Now",
 
@@ -13,6 +14,7 @@ export const translations = {
     "hero.cta": "Start Your Adventure",
 
     "tour.pageTitle": "The Tour",
+    "tour.pageDesc": "Nevidio Canyon canyoning tour — pricing, schedule, gear and safety.",
     "tour.title": "Nevidio Canyon Experience",
     "tour.price": "120€",
     "tour.priceNote": "Price includes Professional Insurance & GoPro Photos/Videos",
@@ -40,6 +42,7 @@ export const translations = {
     "glance.bringLabel": "What to Bring",
 
     "about.pageTitle": "About Us",
+    "about.pageDesc": "Licensed canyoning guides with 5+ years leading Nevidio Canyon tours.",
     "about.title": "Who We Are",
     "about.exp": "5 Years Experience",
     "about.licensed": "Licensed Guides",
@@ -48,6 +51,7 @@ export const translations = {
     "about.desc": "We are a team of passionate canyoning professionals. For over 5 years, we have been leading thrill-seekers through the raw, untouched beauty of Nevidio Canyon. Your safety is our priority, your adrenaline is our promise.",
 
     "gallery.pageTitle": "Gallery",
+    "gallery.pageDesc": "Photos and videos from real Nevidio Canyon canyoning tours.",
     "gallery.title": "The Wild",
 
     "policies.title": "Our Policies",
@@ -60,9 +64,51 @@ export const translations = {
     "location.openMaps": "Open in Google Maps",
 
     "contact.pageTitle": "Contact Us",
+    "contact.pageDesc": "Reach Deep Waters Montenegro on WhatsApp, Facebook, Instagram or by booking form.",
     "contact.socialTitle": "Find Us Online",
     "contact.whatsappBtn": "Chat on WhatsApp",
     "contact.whatsappSub": "Fastest response — we reply within minutes",
+
+    "faq.title": "Frequently Asked Questions",
+    "faq.subtitle": "Everything we get asked before the jump.",
+    "faq.q1": "Do I need to know how to swim?",
+    "faq.a1": "Basic swimming is recommended but not mandatory. You'll wear a wetsuit (which provides buoyancy) and a helmet, and our guides stay close to you in the water at all times.",
+    "faq.q2": "What's the minimum age and maximum weight?",
+    "faq.a2": "Children from age 8 are welcome. The maximum weight is 120kg, mostly because of the standard wetsuit and harness sizing.",
+    "faq.q3": "What should I wear and bring?",
+    "faq.a3": "Come in your swimsuit (under your clothes) and bring only a dry change of clothes and a towel for after. We provide everything else: wetsuit, helmet, harness, neoprene shoes, and the technical gear.",
+    "faq.q4": "Are the jumps mandatory?",
+    "faq.a4": "No. Every jump in the canyon (maximum 2 metres) is optional. For every jump there is always a rope descent (abseiling) alternative led by a guide.",
+    "faq.q5": "What happens if it rains?",
+    "faq.a5": "If conditions are unsafe we will reschedule the tour or fully refund you. You can also cancel for free up to 48 hours before your booking.",
+    "faq.q6": "Do you speak Hebrew?",
+    "faq.a6": "Yes — we have Hebrew-speaking guides available, please mention your preferred language when booking.",
+
+    "guide.pageTitle": "Guide",
+    "guide.pageDesc": "Articles, safety advice and travel tips for canyoning in Montenegro.",
+    "guide.intro": "Stories, safety briefings and travel tips for visiting Nevidio Canyon.",
+    "guide.readMore": "Read article",
+    "guide.comingSoon": "Coming soon",
+    "guide.a1.title": "Canyoning Safety: What Every First-Timer Should Know",
+    "guide.a1.excerpt": "From wetsuit fit to reading the river, here's how our guides keep groups safe in one of Europe's wildest canyons.",
+    "guide.a1.tag": "Safety",
+    "guide.a2.title": "Exploring Montenegro: A 5-Day Adventure Itinerary",
+    "guide.a2.excerpt": "Pair Nevidio with Tara River, Durmitor and the Bay of Kotor for the ultimate Balkan adventure week.",
+    "guide.a2.tag": "Travel",
+    "guide.a3.title": "Inside Nevidio: The Last Discovered Canyon in Europe",
+    "guide.a3.excerpt": "Why Nevidio earned its name — \"the unseen\" — and what makes its emerald pools and narrow walls so unique.",
+    "guide.a3.tag": "Stories",
+
+    "weather.title": "Weather at Nevidio",
+    "weather.loading": "Loading conditions...",
+    "weather.error": "Weather unavailable",
+    "weather.feels": "Feels like",
+    "weather.wind": "Wind",
+    "weather.humidity": "Humidity",
+
+    "instagram.title": "Latest from the Canyon",
+    "instagram.subtitle": "Follow @deepwaters.me on Instagram",
+    "instagram.cta": "View Profile",
 
     "form.title": "Book Your Jump",
     "form.name": "Full Name",
@@ -72,9 +118,16 @@ export const translations = {
     "form.phone": "Phone Number",
     "form.phonePlaceholder": "+1 234 567 890",
     "form.submit": "Book via WhatsApp",
+    "form.rateLimited": "Too many requests. Please wait a minute before trying again.",
+    "form.protectedNote": "Protected by reCAPTCHA. We never share your details.",
+    "form.success": "Opening WhatsApp...",
 
     "footer.rights": "All rights reserved.",
     "footer.followUs": "Follow Us",
+
+    "notfound.title": "Off the Map",
+    "notfound.subtitle": "This trail doesn't exist. Let's get you back to base camp.",
+    "notfound.cta": "Return Home",
 
     "whatsapp.template": "Hello! I'd like to book a canyoning tour.\nName: {name}\nDate: {date}\nGuests: {guests}\nPhone: {phone}"
   },
@@ -82,6 +135,7 @@ export const translations = {
     "nav.tours": "הסיור",
     "nav.about": "עלינו",
     "nav.gallery": "גלריה",
+    "nav.guide": "מדריך",
     "nav.contact": "צור קשר",
     "nav.book": "הזמן עכשיו",
 
@@ -90,6 +144,7 @@ export const translations = {
     "hero.cta": "התחל את ההרפתקה",
 
     "tour.pageTitle": "הסיור",
+    "tour.pageDesc": "סיור קניונינג בקניון נבידיו — מחיר, לוח זמנים, ציוד ובטיחות.",
     "tour.title": "חווית קניון נבידיו",
     "tour.price": "120€",
     "tour.priceNote": "המחיר כולל ביטוח מקצועי ותמונות/סרטוני GoPro",
@@ -117,6 +172,7 @@ export const translations = {
     "glance.bringLabel": "מה להביא",
 
     "about.pageTitle": "עלינו",
+    "about.pageDesc": "מדריכי קניונינג מורשים עם 5+ שנות ניסיון בהובלת סיורים בקניון נבידיו.",
     "about.title": "מי אנחנו",
     "about.exp": "5 שנות ניסיון",
     "about.licensed": "מדריכים מורשים",
@@ -125,6 +181,7 @@ export const translations = {
     "about.desc": "אנו צוות של אנשי מקצוע נלהבים בתחום הקניונינג. במשך למעלה מ-5 שנים, אנו מובילים מחפשי ריגושים דרך היופי הפראי והבתולי של קניון נבידיו. הבטיחות שלך היא בעדיפות הראשונה שלנו, האדרנלין שלך הוא ההבטחה שלנו.",
 
     "gallery.pageTitle": "גלריה",
+    "gallery.pageDesc": "תמונות וסרטונים מסיורי קניונינג אמיתיים בקניון נבידיו.",
     "gallery.title": "הטבע הפראי",
 
     "policies.title": "המדיניות שלנו",
@@ -137,9 +194,51 @@ export const translations = {
     "location.openMaps": "פתח במפות גוגל",
 
     "contact.pageTitle": "צור קשר",
+    "contact.pageDesc": "יצירת קשר עם Deep Waters Montenegro דרך וואטסאפ, פייסבוק, אינסטגרם או טופס הזמנה.",
     "contact.socialTitle": "מצאו אותנו ברשת",
     "contact.whatsappBtn": "שלח הודעה בוואטסאפ",
     "contact.whatsappSub": "מגיבים תוך דקות",
+
+    "faq.title": "שאלות נפוצות",
+    "faq.subtitle": "כל מה ששואלים אותנו לפני הקפיצה.",
+    "faq.q1": "האם צריך לדעת לשחות?",
+    "faq.a1": "מומלץ לדעת לשחות ברמה בסיסית, אך זה לא חובה. תלבשו חליפת צלילה (שמספקת ציפה) וקסדה, והמדריכים נשארים קרובים אליכם במים לאורך כל הסיור.",
+    "faq.q2": "מה גיל המינימום והמשקל המקסימלי?",
+    "faq.a2": "ילדים מגיל 8 ומעלה מוזמנים. המשקל המקסימלי הוא 120 ק\"ג, בעיקר בגלל מידות חליפת הצלילה והרתמה הסטנדרטיות.",
+    "faq.q3": "מה ללבוש ומה להביא?",
+    "faq.a3": "תגיעו בבגד ים (מתחת לבגדים) ותביאו רק בגדים יבשים להחלפה ומגבת לאחרי. אנחנו מספקים את כל השאר: חליפת צלילה, קסדה, רתמה, נעלי ניאופרן והציוד הטכני.",
+    "faq.q4": "האם הקפיצות הן חובה?",
+    "faq.a4": "לא. כל קפיצה בקניון (עד 2 מטר) היא בגדר רשות. לכל קפיצה יש תמיד אלטרנטיבה של ירידה בחבל בליווי מדריך.",
+    "faq.q5": "מה קורה אם יורד גשם?",
+    "faq.a5": "אם התנאים לא בטוחים נקבע מועד חדש או נחזיר את מלוא הכסף. אפשר גם לבטל בחינם עד 48 שעות לפני המועד.",
+    "faq.q6": "האם אתם דוברים עברית?",
+    "faq.a6": "כן — יש לנו מדריכים דוברי עברית, אנא ציינו את שפת ההעדפה שלכם בעת ההזמנה.",
+
+    "guide.pageTitle": "מדריך",
+    "guide.pageDesc": "מאמרים, עצות בטיחות וטיפים לטיול קניונינג במונטנגרו.",
+    "guide.intro": "סיפורים, תדריכי בטיחות וטיפים לטיול בקניון נבידיו.",
+    "guide.readMore": "קרא מאמר",
+    "guide.comingSoon": "בקרוב",
+    "guide.a1.title": "בטיחות בקניונינג: מה כל מתחיל צריך לדעת",
+    "guide.a1.excerpt": "מהתאמת חליפת הצלילה ועד קריאת הזרם — איך המדריכים שלנו שומרים על קבוצות באחד הקניונים הפראיים באירופה.",
+    "guide.a1.tag": "בטיחות",
+    "guide.a2.title": "טיול במונטנגרו: מסלול הרפתקני ל-5 ימים",
+    "guide.a2.excerpt": "שלבו את נבידיו עם נהר טארה, דורמיטור ומפרץ קוטור לשבוע ההרפתקה האולטימטיבי בבלקן.",
+    "guide.a2.tag": "טיול",
+    "guide.a3.title": "בתוך נבידיו: הקניון האחרון שהתגלה באירופה",
+    "guide.a3.excerpt": "למה נבידיו זכה לשמו — \"הבלתי-נראה\" — ומה הופך את בריכות הברקת והקירות הצרים שלו לייחודיים.",
+    "guide.a3.tag": "סיפורים",
+
+    "weather.title": "מזג אוויר בנבידיו",
+    "weather.loading": "טוען נתונים...",
+    "weather.error": "מזג האוויר לא זמין",
+    "weather.feels": "מרגיש כמו",
+    "weather.wind": "רוח",
+    "weather.humidity": "לחות",
+
+    "instagram.title": "האחרונים מהקניון",
+    "instagram.subtitle": "עקבו אחרי @deepwaters.me באינסטגרם",
+    "instagram.cta": "צפו בפרופיל",
 
     "form.title": "הזמן את הקפיצה שלך",
     "form.name": "שם מלא",
@@ -149,9 +248,16 @@ export const translations = {
     "form.phone": "מספר טלפון",
     "form.phonePlaceholder": "+972 50 123 4567",
     "form.submit": "הזמן דרך WhatsApp",
+    "form.rateLimited": "יותר מדי בקשות. אנא המתינו דקה לפני ניסיון נוסף.",
+    "form.protectedNote": "מוגן על ידי reCAPTCHA. הפרטים שלכם לא משותפים לעולם.",
+    "form.success": "פותח WhatsApp...",
 
     "footer.rights": "כל הזכויות שמורות.",
     "footer.followUs": "עקבו אחרינו",
+
+    "notfound.title": "מחוץ למפה",
+    "notfound.subtitle": "השביל הזה לא קיים. בואו נחזיר אתכם למחנה הבסיס.",
+    "notfound.cta": "חזרה לבית",
 
     "whatsapp.template": "שלום! ברצוני להזמין סיור קניונינג.\nשם: {name}\nתאריך: {date}\nאורחים: {guests}\nטלפון: {phone}"
   },
@@ -159,6 +265,7 @@ export const translations = {
     "nav.tours": "Tura",
     "nav.about": "O Nama",
     "nav.gallery": "Galerija",
+    "nav.guide": "Vodič",
     "nav.contact": "Kontakt",
     "nav.book": "Rezerviši",
 
@@ -167,6 +274,7 @@ export const translations = {
     "hero.cta": "Započni Avanturu",
 
     "tour.pageTitle": "Tura",
+    "tour.pageDesc": "Kanjoning tura u kanjonu Nevidio — cijena, raspored, oprema i sigurnost.",
     "tour.title": "Nevidio Kanjon Iskustvo",
     "tour.price": "120€",
     "tour.priceNote": "Cijena uključuje profesionalno osiguranje i GoPro slike/video",
@@ -194,6 +302,7 @@ export const translations = {
     "glance.bringLabel": "Šta Ponijeti",
 
     "about.pageTitle": "O Nama",
+    "about.pageDesc": "Licencirani vodiči za kanjoning sa 5+ godina iskustva u kanjonu Nevidio.",
     "about.title": "Ko Smo Mi",
     "about.exp": "5 Godina Iskustva",
     "about.licensed": "Licencirani Vodiči",
@@ -202,6 +311,7 @@ export const translations = {
     "about.desc": "Mi smo tim strastvenih profesionalaca za kanjoning. Više od 5 godina vodimo zavisnike od adrenalina kroz sirovu, netaknutu ljepotu kanjona Nevidio. Vaša sigurnost je naš prioritet, vaš adrenalin je naše obećanje.",
 
     "gallery.pageTitle": "Galerija",
+    "gallery.pageDesc": "Slike i video snimci sa pravih kanjoning tura u kanjonu Nevidio.",
     "gallery.title": "Divljina",
 
     "policies.title": "Naša Politika",
@@ -214,9 +324,51 @@ export const translations = {
     "location.openMaps": "Otvori u Google Mapama",
 
     "contact.pageTitle": "Kontakt",
+    "contact.pageDesc": "Kontaktirajte Deep Waters Montenegro preko WhatsApp-a, Facebook-a, Instagrama ili formom.",
     "contact.socialTitle": "Pronađite Nas Online",
     "contact.whatsappBtn": "Pišite nam na WhatsApp",
     "contact.whatsappSub": "Odgovaramo u roku od nekoliko minuta",
+
+    "faq.title": "Često Postavljana Pitanja",
+    "faq.subtitle": "Sve što nas pitaju prije skoka.",
+    "faq.q1": "Da li moram znati da plivam?",
+    "faq.a1": "Osnovno plivanje je preporučljivo, ali nije obavezno. Nosite neoprensko odijelo (koje pomaže plutanju) i kacigu, a vodiči vam stalno ostaju blizu u vodi.",
+    "faq.q2": "Koje su minimalne godine i maksimalna težina?",
+    "faq.a2": "Djeca od 8 godina su dobrodošla. Maksimalna težina je 120kg, uglavnom zbog standardnih veličina odijela i pojasa.",
+    "faq.q3": "Šta da obučem i ponesem?",
+    "faq.a3": "Dođite u kupaćem (ispod odjeće) i ponesite samo suvu odjeću za presvlačenje i peškir. Mi obezbjeđujemo sve ostalo: odijelo, kacigu, pojas, neoprenske cipele i tehničku opremu.",
+    "faq.q4": "Da li su skokovi obavezni?",
+    "faq.a4": "Ne. Svaki skok u kanjonu (maksimalno 2m) je opcioni. Za svaki skok uvijek postoji alternativa spuštanja užetom uz vodiča.",
+    "faq.q5": "Šta ako pada kiša?",
+    "faq.a5": "Ako uslovi nisu sigurni, pomjerićemo turu ili izvršiti pun povraćaj novca. Možete besplatno otkazati i 48 sati prije rezervacije.",
+    "faq.q6": "Da li govorite hebrejski?",
+    "faq.a6": "Da — imamo vodiče koji govore hebrejski, molimo da pri rezervaciji navedete željeni jezik.",
+
+    "guide.pageTitle": "Vodič",
+    "guide.pageDesc": "Članci, savjeti o sigurnosti i putovanju za kanjoning u Crnoj Gori.",
+    "guide.intro": "Priče, sigurnosni brifinzi i savjeti za posjetu kanjonu Nevidio.",
+    "guide.readMore": "Pročitaj članak",
+    "guide.comingSoon": "Uskoro",
+    "guide.a1.title": "Sigurnost u Kanjoningu: Šta Svaki Početnik Treba Znati",
+    "guide.a1.excerpt": "Od pravilnog odijela do čitanja rijeke — kako naši vodiči čuvaju grupe u jednom od najdivljijih kanjona Evrope.",
+    "guide.a1.tag": "Sigurnost",
+    "guide.a2.title": "Istražujte Crnu Goru: Avanturistički Plan za 5 Dana",
+    "guide.a2.excerpt": "Spojite Nevidio sa rijekom Tarom, Durmitorom i Bokom Kotorskom za vrhunsku balkansku avanturu.",
+    "guide.a2.tag": "Putovanje",
+    "guide.a3.title": "Unutar Nevidja: Posljednji Otkriveni Kanjon u Evropi",
+    "guide.a3.excerpt": "Zašto je Nevidio zaslužio svoje ime — \"neviđeni\" — i šta čini njegove smaragdne bazene i uske zidove tako jedinstvenim.",
+    "guide.a3.tag": "Priče",
+
+    "weather.title": "Vrijeme na Nevidju",
+    "weather.loading": "Učitavanje uslova...",
+    "weather.error": "Vrijeme nedostupno",
+    "weather.feels": "Osjeća se kao",
+    "weather.wind": "Vjetar",
+    "weather.humidity": "Vlažnost",
+
+    "instagram.title": "Najnovije iz Kanjona",
+    "instagram.subtitle": "Pratite @deepwaters.me na Instagramu",
+    "instagram.cta": "Pogledajte Profil",
 
     "form.title": "Rezerviši Skok",
     "form.name": "Puno Ime",
@@ -226,9 +378,16 @@ export const translations = {
     "form.phone": "Broj Telefona",
     "form.phonePlaceholder": "+382 68 123 456",
     "form.submit": "Rezerviši preko WhatsApp-a",
+    "form.rateLimited": "Previše zahtjeva. Sačekajte minut prije sljedećeg pokušaja.",
+    "form.protectedNote": "Zaštićeno reCAPTCHA-om. Vaši podaci se nikada ne dijele.",
+    "form.success": "Otvaranje WhatsApp-a...",
 
     "footer.rights": "Sva prava zadržana.",
     "footer.followUs": "Pratite Nas",
+
+    "notfound.title": "Van Mape",
+    "notfound.subtitle": "Ova staza ne postoji. Vratimo vas u bazni kamp.",
+    "notfound.cta": "Nazad na Početnu",
 
     "whatsapp.template": "Zdravo! Želim da rezervišem kanjoning turu.\nIme: {name}\nDatum: {date}\nGosti: {guests}\nTelefon: {phone}"
   }

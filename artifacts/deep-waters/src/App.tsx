@@ -8,6 +8,7 @@ import TourPage from "@/pages/TourPage";
 import GalleryPage from "@/pages/GalleryPage";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
+import GuidePage from "@/pages/GuidePage";
 import { LanguageProvider } from "@/lib/LanguageContext";
 
 const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/tour" component={TourPage} />
       <Route path="/gallery" component={GalleryPage} />
       <Route path="/about" component={AboutPage} />
+      <Route path="/guide" component={GuidePage} />
       <Route path="/contact" component={ContactPage} />
       <Route component={NotFound} />
     </Switch>
