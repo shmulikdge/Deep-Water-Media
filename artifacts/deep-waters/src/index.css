@@ -132,6 +132,14 @@
   --ring: 180 50% 30%;
 }
 
+@keyframes hero-fade {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-hero-fade {
+  animation: hero-fade 0.9s ease-out 0.1s both;
+}
+
 @layer base {
   * {
     @apply border-border;

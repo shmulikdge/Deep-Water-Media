@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles } from "lucide-react";
-import confetti from "canvas-confetti";
+import type confettiType from "canvas-confetti";
+
+let confettiMod: typeof confettiType | null = null;
+function getConfetti(): Promise<typeof confettiType> {
+  if (confettiMod) return Promise.resolve(confettiMod);
+  return import("canvas-confetti").then((m) => {
+    confettiMod = m.default;
+    return confettiMod;
+  });
+}
 
 const SESSION_KEY = "dw_welcome_seen_v2";
 const CEREMONY_AUDIO_URL = "https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav";
@@ -45,7 +54,7 @@ export function WelcomeOverlay() {
         window.clearTimeout(confettiBurstTimerRef.current);
       if (confettiFrameRef.current !== null) cancelAnimationFrame(confettiFrameRef.current);
       if (audioFadeFrameRef.current !== null) cancelAnimationFrame(audioFadeFrameRef.current);
-      confetti.reset();
+      if (confettiMod) confettiMod.reset();
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = "";
@@ -55,75 +64,33 @@ export function WelcomeOverlay() {
   }, []);
 
   const launchConfetti = () => {
-    const colors = [
-      "#fbbf24",
-      "#f59e0b",
-      "#ef4444",
-      "#22d3ee",
-      "#a78bfa",
-      "#f472b6",
-      "#34d399",
-      "#ffffff",
-    ];
-    const zIndex = 10000;
+    void getConfetti().then((confetti) => {
+      const colors = [
+        "#fbbf24", "#f59e0b", "#ef4444", "#22d3ee",
+        "#a78bfa", "#f472b6", "#34d399", "#ffffff",
+      ];
+      const zIndex = 10000;
 
-    // Two big center bursts
-    confetti({
-      particleCount: 220,
-      spread: 160,
-      startVelocity: 60,
-      origin: { x: 0.5, y: 0.5 },
-      colors,
-      zIndex,
+      confetti({ particleCount: 220, spread: 160, startVelocity: 60, origin: { x: 0.5, y: 0.5 }, colors, zIndex });
+
+      confettiBurstTimerRef.current = window.setTimeout(() => {
+        confettiBurstTimerRef.current = null;
+        confetti({ particleCount: 160, spread: 180, startVelocity: 55, origin: { x: 0.25, y: 0.45 }, colors, zIndex });
+        confetti({ particleCount: 160, spread: 180, startVelocity: 55, origin: { x: 0.75, y: 0.45 }, colors, zIndex });
+      }, 250);
+
+      const end = Date.now() + 2500;
+      const frame = () => {
+        confetti({ particleCount: 5, angle: 60, spread: 75, startVelocity: 55, origin: { x: 0, y: 0.75 }, colors, zIndex });
+        confetti({ particleCount: 5, angle: 120, spread: 75, startVelocity: 55, origin: { x: 1, y: 0.75 }, colors, zIndex });
+        if (Date.now() < end) {
+          confettiFrameRef.current = requestAnimationFrame(frame);
+        } else {
+          confettiFrameRef.current = null;
+        }
+      };
+      frame();
     });
-    confettiBurstTimerRef.current = window.setTimeout(() => {
-      confettiBurstTimerRef.current = null;
-      confetti({
-        particleCount: 160,
-        spread: 180,
-        startVelocity: 55,
-        origin: { x: 0.25, y: 0.45 },
-        colors,
-        zIndex,
-      });
-      confetti({
-        particleCount: 160,
-        spread: 180,
-        startVelocity: 55,
-        origin: { x: 0.75, y: 0.45 },
-        colors,
-        zIndex,
-      });
-    }, 250);
-
-    // Continuous side cannons for ~2.5s
-    const end = Date.now() + 2500;
-    const frame = () => {
-      confetti({
-        particleCount: 5,
-        angle: 60,
-        spread: 75,
-        startVelocity: 55,
-        origin: { x: 0, y: 0.75 },
-        colors,
-        zIndex,
-      });
-      confetti({
-        particleCount: 5,
-        angle: 120,
-        spread: 75,
-        startVelocity: 55,
-        origin: { x: 1, y: 0.75 },
-        colors,
-        zIndex,
-      });
-      if (Date.now() < end) {
-        confettiFrameRef.current = requestAnimationFrame(frame);
-      } else {
-        confettiFrameRef.current = null;
-      }
-    };
-    frame();
   };
 
   const playCeremonyAudio = async () => {
