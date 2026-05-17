@@ -15,6 +15,7 @@ import TermsPage from "@/pages/TermsPage";
 import { LanguageProvider } from "@/lib/LanguageContext";
 import { CookieBanner } from "@/components/CookieBanner";
 import { BackToTop } from "@/components/BackToTop";
+import { HearTheCanyon } from "@/components/HearTheCanyon";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ function App() {
         <TooltipProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
             <Router />
+            <HearTheCanyon />
             <CookieBanner />
             <BackToTop />
           </WouterRouter>

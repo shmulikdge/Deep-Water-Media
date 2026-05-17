@@ -1,6 +1,8 @@
 import { useLanguage } from "../lib/LanguageContext";
 import { Navigation } from "../components/Navigation";
 import { Hero } from "../components/Hero";
+import { WaterLevelStatus } from "../components/WaterLevelStatus";
+import { GearChecklist } from "../components/GearChecklist";
 import { BookingForm } from "../components/BookingForm";
 import { Footer } from "../components/Footer";
 import { WhatsAppFloat } from "../components/WhatsAppFloat";
@@ -16,6 +18,8 @@ export default function Home() {
     <div className="bg-background min-h-screen text-foreground overflow-x-hidden">
       <Navigation />
       <Hero />
+      <WaterLevelStatus />
+      <GearChecklist />
       <BookingForm />
       <InstagramFeed />
       <MapSection />
