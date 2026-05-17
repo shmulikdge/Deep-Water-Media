@@ -158,18 +158,30 @@ export function WelcomeOverlay() {
 
   const handleCut = () => {
     if (phase !== "idle") return;
-    setPhase("snipping");
-    void playCeremonyAudio();
-    snipTimerRef.current = window.setTimeout(() => {
-      snipTimerRef.current = null;
-      setPhase("cutting");
-      launchConfetti();
-      closeTimerRef.current = window.setTimeout(() => {
-        closeTimerRef.current = null;
-        stopCeremonyAudio();
-        setOpen(false);
-      }, CEREMONY_PLAY_MS);
-    }, 520);
+    try {
+      setPhase("snipping");
+      void playCeremonyAudio();
+      snipTimerRef.current = window.setTimeout(() => {
+        snipTimerRef.current = null;
+        try {
+          setPhase("cutting");
+          launchConfetti();
+          closeTimerRef.current = window.setTimeout(() => {
+            closeTimerRef.current = null;
+            try {
+              stopCeremonyAudio();
+            } catch {
+              /* ignore */
+            }
+            setOpen(false);
+          }, CEREMONY_PLAY_MS);
+        } catch {
+          setOpen(false);
+        }
+      }, 520);
+    } catch {
+      setOpen(false);
+    }
   };
 
   const cutting = phase === "cutting";
