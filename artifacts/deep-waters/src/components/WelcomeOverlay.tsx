@@ -126,16 +126,14 @@ export function WelcomeOverlay() {
     frame();
   };
 
-  const playCeremonyAudio = () => {
+  const playCeremonyAudio = async () => {
     try {
       const audio = new Audio(CEREMONY_AUDIO_URL);
       audio.volume = 1;
       audioRef.current = audio;
-      void audio.play().catch(() => {
-        /* host may block hotlink — silent fail, visuals still play */
-      });
+      await audio.play();
     } catch {
-      /* ignore */
+      /* host may block hotlink — silent fail, visuals still play */
     }
   };
 
@@ -161,11 +159,11 @@ export function WelcomeOverlay() {
   const handleCut = () => {
     if (phase !== "idle") return;
     setPhase("snipping");
+    void playCeremonyAudio();
     snipTimerRef.current = window.setTimeout(() => {
       snipTimerRef.current = null;
       setPhase("cutting");
       launchConfetti();
-      playCeremonyAudio();
       closeTimerRef.current = window.setTimeout(() => {
         closeTimerRef.current = null;
         stopCeremonyAudio();
