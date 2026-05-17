@@ -1,43 +1,31 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { Volume2, VolumeX, Loader2 } from "lucide-react";
 import { useLanguage } from "../lib/LanguageContext";
-import { createCanyonAudio, type CanyonAudio } from "../lib/canyonAudio";
+import { getCanyonAudio } from "../lib/canyonAudio";
 
 export function HearTheCanyon() {
   const { t } = useLanguage();
-  const audioRef = useRef<CanyonAudio | null>(null);
-  const [playing, setPlaying] = useState(false);
+  const audio = useMemo(() => getCanyonAudio(), []);
+  const [playing, setPlaying] = useState(() => audio.isPlaying());
   const [loading, setLoading] = useState(false);
-  const [supported, setSupported] = useState(true);
 
-  useEffect(() => {
-    const a = createCanyonAudio();
-    audioRef.current = a;
-    setSupported(a.isSupported);
-    return () => a.destroy();
-  }, []);
+  useEffect(() => audio.subscribe(setPlaying), [audio]);
+
+  if (!audio.isSupported) return null;
 
   const toggle = async () => {
-    const a = audioRef.current;
-    if (!a) return;
     if (playing) {
-      a.stop();
-      setPlaying(false);
+      audio.stop();
       return;
     }
     try {
       setLoading(true);
-      await a.start();
-      setPlaying(true);
-    } catch {
-      setSupported(false);
+      await audio.start();
     } finally {
       setLoading(false);
     }
   };
-
-  if (!supported) return null;
 
   return (
     <motion.button

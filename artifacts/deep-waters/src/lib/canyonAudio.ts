@@ -11,6 +11,8 @@ export interface CanyonAudio {
   stop: () => void;
   destroy: () => void;
   isSupported: boolean;
+  isPlaying: () => boolean;
+  subscribe: (cb: (playing: boolean) => void) => () => void;
 }
 
 export function createCanyonAudio(): CanyonAudio {
@@ -21,6 +23,8 @@ export function createCanyonAudio(): CanyonAudio {
       stop: () => {},
       destroy: () => {},
       isSupported: false,
+      isPlaying: () => false,
+      subscribe: () => () => {},
     };
   }
   const Ctor: AnyAudioCtx = CtorRaw;
@@ -28,6 +32,13 @@ export function createCanyonAudio(): CanyonAudio {
   let ctx: AudioContext | null = null;
   let source: AudioBufferSourceNode | null = null;
   let gain: GainNode | null = null;
+  let playing = false;
+  const listeners = new Set<(p: boolean) => void>();
+  const setPlaying = (p: boolean) => {
+    if (playing === p) return;
+    playing = p;
+    listeners.forEach((cb) => cb(p));
+  };
 
   function buildGraph(c: AudioContext) {
     const sampleRate = c.sampleRate;
@@ -85,12 +96,14 @@ export function createCanyonAudio(): CanyonAudio {
       gain.gain.cancelScheduledValues(ctx.currentTime);
       gain.gain.linearRampToValueAtTime(0.32, ctx.currentTime + 0.5);
     }
+    setPlaying(true);
   }
 
   function stop() {
     if (!ctx || !gain) return;
     gain.gain.cancelScheduledValues(ctx.currentTime);
     gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.4);
+    setPlaying(false);
   }
 
   function destroy() {
@@ -105,9 +118,26 @@ export function createCanyonAudio(): CanyonAudio {
       void ctx.close();
     }
     ctx = null;
+    setPlaying(false);
   }
 
-  return { start, stop, destroy, isSupported: true };
+  return {
+    start,
+    stop,
+    destroy,
+    isSupported: true,
+    isPlaying: () => playing,
+    subscribe: (cb) => {
+      listeners.add(cb);
+      return () => listeners.delete(cb);
+    },
+  };
+}
+
+let singleton: CanyonAudio | null = null;
+export function getCanyonAudio(): CanyonAudio {
+  if (!singleton) singleton = createCanyonAudio();
+  return singleton;
 }
 
 export function playSplash(volume = 0.5): void {

@@ -18,6 +18,7 @@ import { LanguageProvider } from "@/lib/LanguageContext";
 import { CookieBanner } from "@/components/CookieBanner";
 import { BackToTop } from "@/components/BackToTop";
 import { HearTheCanyon } from "@/components/HearTheCanyon";
+import { WelcomeOverlay } from "@/components/WelcomeOverlay";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ function App() {
             <CookieBanner />
             <BackToTop />
           </WouterRouter>
+          <WelcomeOverlay />
           <Toaster />
         </TooltipProvider>
       </LanguageProvider>
