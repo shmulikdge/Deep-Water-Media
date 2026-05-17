@@ -1,155 +1,157 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Scissors, Sparkles } from "lucide-react";
-import { getCanyonAudio } from "../lib/canyonAudio";
+import { Sparkles } from "lucide-react";
+import confetti from "canvas-confetti";
 
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  life: number;
-  color: string;
-  r: number;
-}
+const SESSION_KEY = "dw_welcome_seen_v2";
+const APPLAUSE_URL = "https://www.soundjay.com/human/applause-01.mp3";
 
-const COLORS = [
-  "#fbbf24",
-  "#ef4444",
-  "#22d3ee",
-  "#a78bfa",
-  "#f472b6",
-  "#34d399",
-  "#ffffff",
-  "#fde68a",
-];
+type Phase = "idle" | "snipping" | "cutting";
 
 export function WelcomeOverlay() {
-  const [open, setOpen] = useState(true);
-  const [cutting, setCutting] = useState(false);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef = useRef<number>(0);
-  const particlesRef = useRef<Particle[]>([]);
-  const lastBurstRef = useRef<number>(0);
-  const startTimeRef = useRef<number>(0);
+  const [open, setOpen] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return window.sessionStorage.getItem(SESSION_KEY) !== "1";
+    } catch {
+      return true;
+    }
+  });
+  const [phase, setPhase] = useState<Phase>("idle");
+  const snipTimerRef = useRef<number | null>(null);
   const closeTimerRef = useRef<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const confettiFrameRef = useRef<number | null>(null);
+  const confettiBurstTimerRef = useRef<number | null>(null);
 
-  const handleCut = () => {
-    if (cutting) return;
-    setCutting(true);
-    void getCanyonAudio()
-      .start()
-      .catch(() => {
-        /* audio is best-effort; user can still toggle later */
-      });
-    closeTimerRef.current = window.setTimeout(() => {
-      setOpen(false);
-      closeTimerRef.current = null;
-    }, 3200);
-  };
+  // Mark seen as soon as the overlay opens so refresh mid-ceremony won't reshow.
+  useEffect(() => {
+    if (!open) return;
+    try {
+      window.sessionStorage.setItem(SESSION_KEY, "1");
+    } catch {
+      /* ignore quota / privacy mode errors */
+    }
+  }, [open]);
 
   useEffect(() => {
     return () => {
-      if (closeTimerRef.current !== null) {
-        window.clearTimeout(closeTimerRef.current);
+      if (snipTimerRef.current !== null) window.clearTimeout(snipTimerRef.current);
+      if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
+      if (confettiBurstTimerRef.current !== null)
+        window.clearTimeout(confettiBurstTimerRef.current);
+      if (confettiFrameRef.current !== null) cancelAnimationFrame(confettiFrameRef.current);
+      confetti.reset();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = "";
+        audioRef.current = null;
       }
     };
   }, []);
 
-  // Fireworks engine — runs only after the ribbon is cut
-  useEffect(() => {
-    if (!cutting) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+  const launchConfetti = () => {
+    const colors = [
+      "#fbbf24",
+      "#f59e0b",
+      "#ef4444",
+      "#22d3ee",
+      "#a78bfa",
+      "#f472b6",
+      "#34d399",
+      "#ffffff",
+    ];
+    const zIndex = 10000;
 
-    const resize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      canvas.style.width = w + "px";
-      canvas.style.height = h + "px";
-      canvas.width = Math.floor(w * dpr);
-      canvas.height = Math.floor(h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    resize();
-    window.addEventListener("resize", resize);
+    // Two big center bursts
+    confetti({
+      particleCount: 220,
+      spread: 160,
+      startVelocity: 60,
+      origin: { x: 0.5, y: 0.5 },
+      colors,
+      zIndex,
+    });
+    confettiBurstTimerRef.current = window.setTimeout(() => {
+      confettiBurstTimerRef.current = null;
+      confetti({
+        particleCount: 160,
+        spread: 180,
+        startVelocity: 55,
+        origin: { x: 0.25, y: 0.45 },
+        colors,
+        zIndex,
+      });
+      confetti({
+        particleCount: 160,
+        spread: 180,
+        startVelocity: 55,
+        origin: { x: 0.75, y: 0.45 },
+        colors,
+        zIndex,
+      });
+    }, 250);
 
-    startTimeRef.current = performance.now();
-    let last = performance.now();
-
-    const spawnBurst = (cx: number, cy: number) => {
-      const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-      const count = 70 + Math.floor(Math.random() * 40);
-      for (let i = 0; i < count; i++) {
-        const angle = (i / count) * Math.PI * 2 + Math.random() * 0.3;
-        const speed = 120 + Math.random() * 320;
-        particlesRef.current.push({
-          x: cx,
-          y: cy,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed,
-          life: 1,
-          color,
-          r: 1.6 + Math.random() * 2.4,
-        });
+    // Continuous side cannons for ~2.5s
+    const end = Date.now() + 2500;
+    const frame = () => {
+      confetti({
+        particleCount: 5,
+        angle: 60,
+        spread: 75,
+        startVelocity: 55,
+        origin: { x: 0, y: 0.75 },
+        colors,
+        zIndex,
+      });
+      confetti({
+        particleCount: 5,
+        angle: 120,
+        spread: 75,
+        startVelocity: 55,
+        origin: { x: 1, y: 0.75 },
+        colors,
+        zIndex,
+      });
+      if (Date.now() < end) {
+        confettiFrameRef.current = requestAnimationFrame(frame);
+      } else {
+        confettiFrameRef.current = null;
       }
     };
+    frame();
+  };
 
-    // Opening salvo
-    spawnBurst(window.innerWidth * 0.5, window.innerHeight * 0.45);
+  const playApplause = () => {
+    try {
+      const audio = new Audio(APPLAUSE_URL);
+      audio.volume = 0.85;
+      audioRef.current = audio;
+      void audio.play().catch(() => {
+        /* host may block hotlink — silent fail, visuals still play */
+      });
+    } catch {
+      /* ignore */
+    }
+  };
 
-    const tick = (now: number) => {
-      const dt = Math.min(0.033, (now - last) / 1000);
-      last = now;
-      const elapsed = now - startTimeRef.current;
-      const w = window.innerWidth;
-      const h = window.innerHeight;
+  const handleCut = () => {
+    if (phase !== "idle") return;
+    setPhase("snipping");
+    snipTimerRef.current = window.setTimeout(() => {
+      snipTimerRef.current = null;
+      setPhase("cutting");
+      launchConfetti();
+      playApplause();
+      closeTimerRef.current = window.setTimeout(() => {
+        closeTimerRef.current = null;
+        setOpen(false);
+      }, 3000);
+    }, 520);
+  };
 
-      if (elapsed < 2600 && now - lastBurstRef.current > 200) {
-        lastBurstRef.current = now;
-        spawnBurst(w * (0.08 + Math.random() * 0.84), h * (0.12 + Math.random() * 0.5));
-        if (Math.random() < 0.5) {
-          spawnBurst(w * (0.08 + Math.random() * 0.84), h * (0.12 + Math.random() * 0.5));
-        }
-      }
-
-      // Trail effect: slight fade instead of full clear
-      ctx.fillStyle = "rgba(0, 0, 0, 0.18)";
-      ctx.fillRect(0, 0, w, h);
-
-      ctx.globalCompositeOperation = "lighter";
-      for (const p of particlesRef.current) {
-        p.vy += 240 * dt;
-        p.vx *= 0.985;
-        p.x += p.vx * dt;
-        p.y += p.vy * dt;
-        p.life -= dt / 1.5;
-        if (p.life > 0) {
-          const a = Math.max(0, p.life);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = a;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-      ctx.globalAlpha = 1;
-      ctx.globalCompositeOperation = "source-over";
-      particlesRef.current = particlesRef.current.filter((p) => p.life > 0);
-
-      rafRef.current = requestAnimationFrame(tick);
-    };
-    rafRef.current = requestAnimationFrame(tick);
-
-    return () => {
-      cancelAnimationFrame(rafRef.current);
-      window.removeEventListener("resize", resize);
-      particlesRef.current = [];
-    };
-  }, [cutting]);
+  const cutting = phase === "cutting";
+  const snipping = phase === "snipping";
 
   return (
     <AnimatePresence>
@@ -160,39 +162,33 @@ export function WelcomeOverlay() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.9, ease: "easeOut" }}
-          className="fixed inset-0 z-[1000] flex items-center justify-center overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-black"
+          className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-black"
           data-testid="welcome-overlay"
           dir="ltr"
         >
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.18)_0%,transparent_65%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(45,212,191,0.12)_0%,transparent_50%)]" />
-
-          <canvas
-            ref={canvasRef}
-            className="absolute inset-0 pointer-events-none"
-            style={{ display: cutting ? "block" : "none" }}
-            aria-hidden
-          />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(45,212,191,0.10)_0%,transparent_55%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(251,191,36,0.10)_0%,transparent_55%)]" />
 
           <div className="relative z-10 flex w-full max-w-5xl flex-col items-center justify-center px-6 text-center">
             <AnimatePresence>
-              {!cutting && (
+              {phase === "idle" && (
                 <motion.div
                   key="welcome-text"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -24, transition: { duration: 0.5 } }}
-                  transition={{ duration: 0.8, delay: 0.25 }}
+                  exit={{ opacity: 0, y: -24, transition: { duration: 0.45 } }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
                   className="mb-12 md:mb-16"
                 >
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.5, duration: 0.6 }}
-                    className="inline-flex items-center gap-2 mb-5 px-4 py-1.5 border border-red-500/40 bg-red-500/10 rounded-full"
+                    transition={{ delay: 0.45, duration: 0.6 }}
+                    className="inline-flex items-center gap-2 mb-5 px-4 py-1.5 border border-amber-400/40 bg-amber-400/10 rounded-full"
                   >
-                    <Sparkles className="w-3.5 h-3.5 text-red-300" />
-                    <span className="text-[10px] md:text-xs font-mono uppercase tracking-[0.35em] text-red-200">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                    <span className="text-[10px] md:text-xs font-mono uppercase tracking-[0.35em] text-amber-200">
                       Grand Opening · פתיחה חגיגית
                     </span>
                   </motion.div>
@@ -212,16 +208,16 @@ export function WelcomeOverlay() {
               )}
             </AnimatePresence>
 
-            <Ribbon cutting={cutting} onCut={handleCut} />
+            <Ribbon cutting={cutting} snipping={snipping} onCut={handleCut} />
 
             <AnimatePresence>
-              {!cutting && (
+              {phase === "idle" && (
                 <motion.p
                   key="hint"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ delay: 1.1, duration: 0.6 }}
+                  transition={{ delay: 0.9, duration: 0.6 }}
                   className="mt-10 md:mt-14 text-[10px] md:text-xs font-mono uppercase tracking-[0.4em] text-white/45"
                 >
                   ✂ Cut the ribbon — חתוך את הסרט ✂
@@ -235,8 +231,8 @@ export function WelcomeOverlay() {
                   key="launching"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.4, duration: 0.6 }}
-                  className="absolute bottom-16 left-1/2 -translate-x-1/2 text-sm md:text-base font-mono uppercase tracking-[0.4em] text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.6)]"
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="absolute bottom-16 left-1/2 -translate-x-1/2 text-sm md:text-base font-mono uppercase tracking-[0.4em] text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.7)]"
                 >
                   Launching…
                 </motion.p>
@@ -249,18 +245,23 @@ export function WelcomeOverlay() {
   );
 }
 
-function Ribbon({ cutting, onCut }: { cutting: boolean; onCut: () => void }) {
+function Ribbon({
+  cutting,
+  snipping,
+  onCut,
+}: {
+  cutting: boolean;
+  snipping: boolean;
+  onCut: () => void;
+}) {
   return (
     <div className="relative flex h-32 md:h-40 w-[min(680px,94vw)] items-center justify-center">
+      {/* Left ribbon half */}
       <motion.div
-        className="absolute left-0 top-0 h-full"
-        style={{ width: "50%", transformOrigin: "left center" }}
-        animate={
-          cutting
-            ? { x: -360, y: 260, rotate: -38, opacity: 0 }
-            : { x: 0, y: 0, rotate: 0, opacity: 1 }
-        }
-        transition={{ duration: 1.5, ease: [0.4, 0, 0.6, 1] }}
+        className="absolute left-0 top-1/2 -translate-y-1/2 h-[70%]"
+        style={{ width: "50%" }}
+        animate={cutting ? { x: -1400, opacity: 0 } : { x: 0, opacity: 1 }}
+        transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1] }}
       >
         <svg viewBox="0 0 300 130" className="w-full h-full" preserveAspectRatio="none">
           <defs>
@@ -285,15 +286,12 @@ function Ribbon({ cutting, onCut }: { cutting: boolean; onCut: () => void }) {
         </svg>
       </motion.div>
 
+      {/* Right ribbon half */}
       <motion.div
-        className="absolute right-0 top-0 h-full"
-        style={{ width: "50%", transformOrigin: "right center" }}
-        animate={
-          cutting
-            ? { x: 360, y: 260, rotate: 38, opacity: 0 }
-            : { x: 0, y: 0, rotate: 0, opacity: 1 }
-        }
-        transition={{ duration: 1.5, ease: [0.4, 0, 0.6, 1] }}
+        className="absolute right-0 top-1/2 -translate-y-1/2 h-[70%]"
+        style={{ width: "50%" }}
+        animate={cutting ? { x: 1400, opacity: 0 } : { x: 0, opacity: 1 }}
+        transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1] }}
       >
         <svg viewBox="0 0 300 130" className="w-full h-full" preserveAspectRatio="none">
           <defs>
@@ -318,16 +316,17 @@ function Ribbon({ cutting, onCut }: { cutting: boolean; onCut: () => void }) {
         </svg>
       </motion.div>
 
+      {/* Golden scissors button */}
       <motion.button
         onClick={onCut}
-        disabled={cutting}
+        disabled={cutting || snipping}
         data-testid="btn-cut-ribbon"
         aria-label="Cut the ribbon"
-        whileHover={cutting ? undefined : { scale: 1.08, rotate: -8 }}
-        whileTap={cutting ? undefined : { scale: 0.94 }}
+        whileHover={cutting || snipping ? undefined : { scale: 1.08 }}
+        whileTap={cutting || snipping ? undefined : { scale: 0.94 }}
         animate={
           cutting
-            ? { scale: [1, 1.45, 0], rotate: [0, 220, 540], opacity: [1, 1, 0], y: [0, -30, -100] }
+            ? { scale: [1, 1.4, 0], rotate: 540, opacity: [1, 1, 0], y: [0, -30, -120] }
             : { y: [0, -6, 0] }
         }
         transition={
@@ -335,10 +334,98 @@ function Ribbon({ cutting, onCut }: { cutting: boolean; onCut: () => void }) {
             ? { duration: 1.2, ease: "easeOut" }
             : { y: { duration: 2, repeat: Infinity, ease: "easeInOut" } }
         }
-        className="relative z-20 rounded-full bg-white p-5 md:p-6 text-zinc-900 shadow-[0_0_60px_rgba(255,255,255,0.55),0_0_120px_rgba(220,38,38,0.45)] hover:bg-amber-50 cursor-pointer disabled:cursor-default focus:outline-none focus-visible:ring-4 focus-visible:ring-red-500/60"
+        className="relative z-20 rounded-full bg-gradient-to-br from-amber-100 via-amber-200 to-amber-50 p-4 md:p-5 shadow-[0_0_60px_rgba(251,191,36,0.6),0_0_120px_rgba(220,38,38,0.35)] hover:shadow-[0_0_80px_rgba(251,191,36,0.8),0_0_140px_rgba(220,38,38,0.5)] cursor-pointer disabled:cursor-default focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-400/60 transition-shadow"
       >
-        <Scissors className="w-10 h-10 md:w-14 md:h-14" strokeWidth={2.4} />
+        <GoldenScissors snipping={snipping} />
       </motion.button>
     </div>
+  );
+}
+
+/**
+ * Golden scissors with two independently-rotating blade groups around the pivot.
+ * Snip animation: blades close (rotate to 0°), open, close, open — quick double snip.
+ */
+function GoldenScissors({ snipping }: { snipping: boolean }) {
+  const OPEN_TOP = -10;
+  const OPEN_BOT = 10;
+
+  const topAnimate = snipping
+    ? { rotate: [OPEN_TOP, 0, OPEN_TOP, 0, OPEN_TOP] }
+    : { rotate: OPEN_TOP };
+  const botAnimate = snipping
+    ? { rotate: [OPEN_BOT, 0, OPEN_BOT, 0, OPEN_BOT] }
+    : { rotate: OPEN_BOT };
+  const snipTransition = {
+    duration: 0.5,
+    times: [0, 0.22, 0.45, 0.7, 1],
+    ease: "easeInOut" as const,
+  };
+
+  return (
+    <svg
+      viewBox="0 0 160 100"
+      className="w-20 h-12 md:w-28 md:h-16 drop-shadow-[0_4px_18px_rgba(251,191,36,0.7)]"
+      aria-hidden
+    >
+      <defs>
+        <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#fef3c7" />
+          <stop offset="0.35" stopColor="#fbbf24" />
+          <stop offset="0.7" stopColor="#d97706" />
+          <stop offset="1" stopColor="#92400e" />
+        </linearGradient>
+        <linearGradient id="bladeGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#fef9c3" />
+          <stop offset="0.5" stopColor="#fbbf24" />
+          <stop offset="1" stopColor="#b45309" />
+        </linearGradient>
+      </defs>
+
+      {/* Top blade + handle (rotates around pivot 70,50) */}
+      <motion.g
+        style={{ originX: "70px", originY: "50px" }}
+        animate={topAnimate}
+        transition={snipping ? snipTransition : { duration: 0.3, ease: "easeOut" }}
+      >
+        {/* finger ring */}
+        <circle cx="20" cy="32" r="13" stroke="url(#goldGrad)" strokeWidth="5" fill="none" />
+        <circle cx="20" cy="32" r="9" stroke="#92400e" strokeWidth="1" fill="none" opacity="0.4" />
+        {/* arm from ring to pivot */}
+        <path
+          d="M 30 38 Q 50 44 70 50"
+          stroke="url(#goldGrad)"
+          strokeWidth="6"
+          strokeLinecap="round"
+          fill="none"
+        />
+        {/* blade */}
+        <path d="M 70 50 L 152 36 L 156 44 L 72 54 Z" fill="url(#bladeGrad)" />
+        <path d="M 72 52 L 152 39" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+      </motion.g>
+
+      {/* Bottom blade + handle */}
+      <motion.g
+        style={{ originX: "70px", originY: "50px" }}
+        animate={botAnimate}
+        transition={snipping ? snipTransition : { duration: 0.3, ease: "easeOut" }}
+      >
+        <circle cx="20" cy="68" r="13" stroke="url(#goldGrad)" strokeWidth="5" fill="none" />
+        <circle cx="20" cy="68" r="9" stroke="#92400e" strokeWidth="1" fill="none" opacity="0.4" />
+        <path
+          d="M 30 62 Q 50 56 70 50"
+          stroke="url(#goldGrad)"
+          strokeWidth="6"
+          strokeLinecap="round"
+          fill="none"
+        />
+        <path d="M 70 50 L 152 64 L 156 56 L 72 46 Z" fill="url(#bladeGrad)" />
+        <path d="M 72 48 L 152 61" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
+      </motion.g>
+
+      {/* Pivot screw */}
+      <circle cx="70" cy="50" r="4.5" fill="#78350f" stroke="#fbbf24" strokeWidth="1.5" />
+      <circle cx="70" cy="50" r="1.2" fill="#fef3c7" />
+    </svg>
   );
 }
