@@ -4,7 +4,9 @@ import { Sparkles } from "lucide-react";
 import confetti from "canvas-confetti";
 
 const SESSION_KEY = "dw_welcome_seen_v2";
-const APPLAUSE_URL = "https://www.soundjay.com/human/applause-01.mp3";
+const CEREMONY_AUDIO_URL = "https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav";
+const CEREMONY_PLAY_MS = 5000;
+const CEREMONY_FADE_MS = 1500;
 
 type Phase = "idle" | "snipping" | "cutting";
 
@@ -21,6 +23,7 @@ export function WelcomeOverlay() {
   const snipTimerRef = useRef<number | null>(null);
   const closeTimerRef = useRef<number | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioFadeFrameRef = useRef<number | null>(null);
   const confettiFrameRef = useRef<number | null>(null);
   const confettiBurstTimerRef = useRef<number | null>(null);
 
@@ -41,6 +44,7 @@ export function WelcomeOverlay() {
       if (confettiBurstTimerRef.current !== null)
         window.clearTimeout(confettiBurstTimerRef.current);
       if (confettiFrameRef.current !== null) cancelAnimationFrame(confettiFrameRef.current);
+      if (audioFadeFrameRef.current !== null) cancelAnimationFrame(audioFadeFrameRef.current);
       confetti.reset();
       if (audioRef.current) {
         audioRef.current.pause();
@@ -122,10 +126,10 @@ export function WelcomeOverlay() {
     frame();
   };
 
-  const playApplause = () => {
+  const playCeremonyAudio = () => {
     try {
-      const audio = new Audio(APPLAUSE_URL);
-      audio.volume = 0.85;
+      const audio = new Audio(CEREMONY_AUDIO_URL);
+      audio.volume = 1;
       audioRef.current = audio;
       void audio.play().catch(() => {
         /* host may block hotlink — silent fail, visuals still play */
@@ -135,6 +139,25 @@ export function WelcomeOverlay() {
     }
   };
 
+  const stopCeremonyAudio = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    const startedAt = performance.now();
+    const fadeTick = () => {
+      const elapsed = performance.now() - startedAt;
+      const remaining = Math.max(0, CEREMONY_FADE_MS - elapsed);
+      audio.volume = Math.max(0, remaining / CEREMONY_FADE_MS);
+      if (remaining > 0) {
+        audioFadeFrameRef.current = requestAnimationFrame(fadeTick);
+      } else {
+        audioFadeFrameRef.current = null;
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+    audioFadeFrameRef.current = requestAnimationFrame(fadeTick);
+  };
+
   const handleCut = () => {
     if (phase !== "idle") return;
     setPhase("snipping");
@@ -142,11 +165,12 @@ export function WelcomeOverlay() {
       snipTimerRef.current = null;
       setPhase("cutting");
       launchConfetti();
-      playApplause();
+      playCeremonyAudio();
       closeTimerRef.current = window.setTimeout(() => {
         closeTimerRef.current = null;
+        stopCeremonyAudio();
         setOpen(false);
-      }, 3000);
+      }, CEREMONY_PLAY_MS);
     }, 520);
   };
 
@@ -161,7 +185,7 @@ export function WelcomeOverlay() {
           initial={{ opacity: 1 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
+          transition={{ duration: 1.5, ease: "easeOut" }}
           className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-gradient-to-br from-black via-zinc-950 to-black"
           data-testid="welcome-overlay"
           dir="ltr"
