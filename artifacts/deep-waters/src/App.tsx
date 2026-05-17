@@ -10,6 +10,8 @@ import GalleryPage from "@/pages/GalleryPage";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import GuidePage from "@/pages/GuidePage";
+import GuideArticlePage from "@/pages/GuideArticlePage";
+import AdventureGame from "@/pages/AdventureGame";
 import PrivacyPolicyPage from "@/pages/PrivacyPolicyPage";
 import TermsPage from "@/pages/TermsPage";
 import { LanguageProvider } from "@/lib/LanguageContext";
@@ -37,6 +39,8 @@ function Router() {
         <Route path="/gallery" component={GalleryPage} />
         <Route path="/about" component={AboutPage} />
         <Route path="/guide" component={GuidePage} />
+        <Route path="/guide/:slug" component={GuideArticlePage} />
+        <Route path="/adventure-game" component={AdventureGame} />
         <Route path="/contact" component={ContactPage} />
         <Route path="/privacy-policy" component={PrivacyPolicyPage} />
         <Route path="/terms" component={TermsPage} />

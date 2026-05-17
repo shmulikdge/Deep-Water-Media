@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Volume2, VolumeX, Loader2 } from "lucide-react";
 import { useLanguage } from "../lib/LanguageContext";
 
-const AUDIO_SRC = "https://www.soundjay.com/nature/sounds/river-1.mp3";
+const AUDIO_SRC = "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav";
 
 export function HearTheCanyon() {
   const { t } = useLanguage();

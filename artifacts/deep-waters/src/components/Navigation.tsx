@@ -4,6 +4,7 @@ import { Language } from "../translations";
 import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { JumpingManButton } from "./JumpingManButton";
 import logo from "@assets/deep_water_logo_1778693462993.jpg";
 
 const NAV_LINKS = [
@@ -84,6 +85,7 @@ export function Navigation() {
               isRtl ? "border-r pr-4 mr-2" : "border-l pl-4 ml-2"
             }`}
           >
+            <JumpingManButton />
             <LanguageSwitcher />
             <Button asChild data-testid="btn-nav-book">
               <Link href="/contact">{t("nav.book")}</Link>
@@ -92,6 +94,7 @@ export function Navigation() {
         </div>
 
         <div className="flex lg:hidden items-center gap-3">
+          <JumpingManButton />
           <LanguageSwitcher />
           <button
             className="p-2 text-foreground"

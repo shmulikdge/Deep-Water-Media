@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Link } from "wouter";
 import { Check, Sparkles, PartyPopper } from "lucide-react";
 import { useLanguage } from "../lib/LanguageContext";
 import { Button } from "./ui/button";
@@ -145,12 +144,15 @@ export function GearChecklist() {
                   {t("checklist.success")}
                 </p>
                 <Button
-                  asChild
                   size="lg"
+                  onClick={() => {
+                    const el = document.getElementById("book");
+                    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
                   className="rounded-none font-heading tracking-wider animate-pulse"
                   data-testid="btn-checklist-book"
                 >
-                  <Link href="/contact">{t("checklist.cta")}</Link>
+                  {t("checklist.cta")}
                 </Button>
               </div>
             </motion.div>
