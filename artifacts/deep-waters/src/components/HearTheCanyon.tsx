@@ -2,58 +2,42 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Volume2, VolumeX, Loader2 } from "lucide-react";
 import { useLanguage } from "../lib/LanguageContext";
-
-const AUDIO_SRC = "https://assets.mixkit.co/active_storage/sfx/2568/2568-84.wav";
+import { createCanyonAudio, type CanyonAudio } from "../lib/canyonAudio";
 
 export function HearTheCanyon() {
   const { t } = useLanguage();
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioRef = useRef<CanyonAudio | null>(null);
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errored, setErrored] = useState(false);
+  const [supported, setSupported] = useState(true);
 
   useEffect(() => {
-    const audio = new Audio(AUDIO_SRC);
-    audio.loop = true;
-    audio.preload = "none";
-    audio.volume = 0.5;
-    audio.crossOrigin = "anonymous";
-    audio.addEventListener("error", () => {
-      setErrored(true);
-      setPlaying(false);
-      setLoading(false);
-    });
-    audio.addEventListener("playing", () => setLoading(false));
-    audio.addEventListener("waiting", () => setLoading(true));
-    audioRef.current = audio;
-    return () => {
-      audio.pause();
-      audio.src = "";
-      audioRef.current = null;
-    };
+    const a = createCanyonAudio();
+    audioRef.current = a;
+    setSupported(a.isSupported);
+    return () => a.destroy();
   }, []);
 
   const toggle = async () => {
-    const audio = audioRef.current;
-    if (!audio || errored) return;
+    const a = audioRef.current;
+    if (!a) return;
     if (playing) {
-      audio.pause();
+      a.stop();
       setPlaying(false);
+      return;
+    }
+    try {
+      setLoading(true);
+      await a.start();
+      setPlaying(true);
+    } catch {
+      setSupported(false);
+    } finally {
       setLoading(false);
-    } else {
-      try {
-        setLoading(true);
-        await audio.play();
-        setPlaying(true);
-      } catch {
-        setErrored(true);
-        setPlaying(false);
-        setLoading(false);
-      }
     }
   };
 
-  if (errored) return null;
+  if (!supported) return null;
 
   return (
     <motion.button
