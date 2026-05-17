@@ -50,22 +50,22 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               data-testid="link-social-facebook"
-              aria-label="Facebook"
+              aria-label="Visit Deep Waters Montenegro on Facebook"
               className="flex items-center gap-2 px-4 py-2 border border-white/10 text-muted-foreground hover:text-[#1877F2] hover:border-[#1877F2]/40 transition-colors"
             >
               <FacebookIcon />
-              <span className="text-sm font-medium">Facebook</span>
+              <span className="text-sm font-medium">Visit our Facebook page</span>
             </a>
             <a
               href={INSTAGRAM_URL}
               target="_blank"
               rel="noopener noreferrer"
               data-testid="link-social-instagram"
-              aria-label="Instagram"
+              aria-label="Visit Deep Waters Montenegro on Instagram"
               className="flex items-center gap-2 px-4 py-2 border border-white/10 text-muted-foreground hover:text-[#E1306C] hover:border-[#E1306C]/40 transition-colors"
             >
               <InstagramIcon />
-              <span className="text-sm font-medium">Instagram</span>
+              <span className="text-sm font-medium">Visit our Instagram profile</span>
             </a>
           </div>
         </div>

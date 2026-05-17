@@ -67,10 +67,11 @@ export function Navigation() {
         <div className={`hidden lg:flex items-center gap-6 ${isRtl ? "flex-row-reverse" : ""}`}>
           <div className={`flex gap-5 ${isRtl ? "flex-row-reverse" : ""}`}>
             {NAV_LINKS.map(({ key, href }) => (
-              <Link
+            <Link
                 key={href}
                 href={href}
                 data-testid={`link-nav-${href.replace("/", "")}`}
+                aria-label={`${t(key)} page`}
                 className={`text-sm font-medium transition-colors ${
                   location === href ? "text-primary" : "text-foreground/70 hover:text-primary"
                 }`}
@@ -88,7 +89,9 @@ export function Navigation() {
             <JumpingManButton />
             <LanguageSwitcher />
             <Button asChild data-testid="btn-nav-book">
-              <Link href="/contact">{t("nav.book")}</Link>
+            <Link href="/contact" aria-label={`${t("nav.book")} page`}>
+              {t("nav.book")}
+            </Link>
             </Button>
           </div>
         </div>
@@ -114,13 +117,16 @@ export function Navigation() {
               key={href}
               href={href}
               onClick={() => setMenuOpen(false)}
+              aria-label={`${t(key)} page`}
               className="text-base font-medium py-3 border-b border-white/5 hover:text-primary transition-colors"
             >
               {t(key)}
             </Link>
           ))}
           <Button asChild className="w-full mt-3">
-            <Link href="/contact" onClick={() => setMenuOpen(false)}>{t("nav.book")}</Link>
+            <Link href="/contact" onClick={() => setMenuOpen(false)} aria-label={`${t("nav.book")} page`}>
+              {t("nav.book")}
+            </Link>
           </Button>
         </div>
       )}

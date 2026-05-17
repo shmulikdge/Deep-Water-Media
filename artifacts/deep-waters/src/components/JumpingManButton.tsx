@@ -8,7 +8,7 @@ export function JumpingManButton() {
   const active = location === "/adventure-game";
 
   return (
-    <Link href="/adventure-game" data-testid="link-adventure-game">
+    <Link href="/adventure-game" data-testid="link-adventure-game" aria-label={t("nav.game")}>
       <motion.span
         initial="rest"
         whileHover="jump"

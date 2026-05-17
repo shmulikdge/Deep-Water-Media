@@ -5,7 +5,7 @@ export function WhatsAppFloat() {
       target="_blank"
       rel="noopener noreferrer"
       data-testid="btn-whatsapp-float"
-      aria-label="Chat on WhatsApp"
+      aria-label="Chat with Deep Waters Montenegro on WhatsApp"
       className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-2xl transition-transform hover:scale-110 active:scale-95"
       style={{ backgroundColor: "#25D366" }}
     >
