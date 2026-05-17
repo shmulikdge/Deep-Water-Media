@@ -60,7 +60,16 @@ export function Navigation() {
           data-testid="btn-logo-home"
           className="flex items-center gap-3 focus:outline-none shrink-0"
         >
-          <img src={logo} alt="Deep Waters Montenegro" className="h-12 w-auto object-contain" />
+          <img
+            src={logo}
+            alt="Deep Waters Montenegro"
+            width={240}
+            height={48}
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+            className="h-12 w-auto object-contain"
+          />
           <span className="font-heading text-xl tracking-widest hidden lg:block">Deep Waters</span>
         </button>
 

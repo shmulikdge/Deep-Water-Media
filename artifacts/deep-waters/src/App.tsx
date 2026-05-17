@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -18,7 +18,11 @@ import { LanguageProvider } from "@/lib/LanguageContext";
 import { CookieBanner } from "@/components/CookieBanner";
 import { BackToTop } from "@/components/BackToTop";
 import { HearTheCanyon } from "@/components/HearTheCanyon";
-import { WelcomeOverlay } from "@/components/WelcomeOverlay";
+const WelcomeOverlay = lazy(() =>
+  import("@/components/WelcomeOverlay").then((module) => ({
+    default: module.WelcomeOverlay,
+  })),
+);
 
 const queryClient = new QueryClient();
 
@@ -62,7 +66,9 @@ function App() {
             <CookieBanner />
             <BackToTop />
           </WouterRouter>
-          <WelcomeOverlay />
+          <Suspense fallback={null}>
+            <WelcomeOverlay />
+          </Suspense>
           <Toaster />
         </TooltipProvider>
       </LanguageProvider>

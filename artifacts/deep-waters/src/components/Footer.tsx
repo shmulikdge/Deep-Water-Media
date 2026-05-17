@@ -36,6 +36,10 @@ export function Footer() {
           <img
             src={logo}
             alt="Deep Waters Montenegro"
+            width={320}
+            height={80}
+            loading="lazy"
+            decoding="async"
             className="h-20 w-auto object-contain grayscale hover:grayscale-0 transition-all"
           />
         </button>
