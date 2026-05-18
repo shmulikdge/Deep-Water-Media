@@ -39,6 +39,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Synchronously hide page content if this is the grand-opening first visit.
+         Runs before any React paint so there is zero flash of site content. -->
+    <script>
+      try {
+        if (!sessionStorage.getItem("dw_welcome_seen_v2")) {
+          document.documentElement.classList.add("grand-opening-active");
+        }
+      } catch (e) {}
+    </script>
+
     <!-- Google Analytics (placeholder — replace G-XXXXXXXXXX with your real Measurement ID) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
@@ -49,6 +59,8 @@
     </script>
   </head>
   <body>
+    <!-- Overlay portal root — sibling of #root so CSS opacity on #root does not affect it -->
+    <div id="overlay-root"></div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import type confettiType from "canvas-confetti";
@@ -13,9 +14,14 @@ function getConfetti(): Promise<typeof confettiType> {
 }
 
 const SESSION_KEY = "dw_welcome_seen_v2";
-const CEREMONY_AUDIO_URL = "https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav";
+const INTRO_AUDIO_URL = "https://assets.mixkit.co/active_storage/sfx/123/123-84.wav";
+const CUT_AUDIO_URL = "https://assets.mixkit.co/active_storage/sfx/2019/2019-84.wav";
 const CEREMONY_PLAY_MS = 5000;
 const CEREMONY_FADE_MS = 1500;
+
+function revealPage() {
+  document.documentElement.classList.remove("grand-opening-active");
+}
 
 type Phase = "idle" | "snipping" | "cutting";
 
@@ -31,37 +37,67 @@ export function WelcomeOverlay() {
   const [phase, setPhase] = useState<Phase>("idle");
   const snipTimerRef = useRef<number | null>(null);
   const closeTimerRef = useRef<number | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const introAudioRef = useRef<HTMLAudioElement | null>(null);
+  const cutAudioRef = useRef<HTMLAudioElement | null>(null);
   const audioFadeFrameRef = useRef<number | null>(null);
   const confettiFrameRef = useRef<number | null>(null);
   const confettiBurstTimerRef = useRef<number | null>(null);
 
-  // Mark seen as soon as the overlay opens so refresh mid-ceremony won't reshow.
+  // Mark seen immediately so a mid-ceremony refresh won't reshow.
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      revealPage();
+      return;
+    }
     try {
       window.sessionStorage.setItem(SESSION_KEY, "1");
-    } catch {
-      /* ignore quota / privacy mode errors */
-    }
+    } catch { /* ignore quota / privacy mode errors */ }
   }, [open]);
 
+  // Intro ambient audio — try to autoplay at low volume (may be blocked by browser policy).
+  useEffect(() => {
+    if (!open) return;
+    const audio = new Audio(INTRO_AUDIO_URL);
+    audio.loop = true;
+    audio.volume = 0.2;
+    introAudioRef.current = audio;
+    void audio.play().catch(() => { /* autoplay blocked — visuals still work */ });
+    return () => {
+      audio.pause();
+      audio.src = "";
+      introAudioRef.current = null;
+    };
+  }, [open]);
+
+  // Cleanup all timers / audio on unmount.
   useEffect(() => {
     return () => {
       if (snipTimerRef.current !== null) window.clearTimeout(snipTimerRef.current);
       if (closeTimerRef.current !== null) window.clearTimeout(closeTimerRef.current);
-      if (confettiBurstTimerRef.current !== null)
-        window.clearTimeout(confettiBurstTimerRef.current);
+      if (confettiBurstTimerRef.current !== null) window.clearTimeout(confettiBurstTimerRef.current);
       if (confettiFrameRef.current !== null) cancelAnimationFrame(confettiFrameRef.current);
       if (audioFadeFrameRef.current !== null) cancelAnimationFrame(audioFadeFrameRef.current);
       if (confettiMod) confettiMod.reset();
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.src = "";
-        audioRef.current = null;
+      if (introAudioRef.current) {
+        introAudioRef.current.pause();
+        introAudioRef.current.src = "";
+        introAudioRef.current = null;
+      }
+      if (cutAudioRef.current) {
+        cutAudioRef.current.pause();
+        cutAudioRef.current.src = "";
+        cutAudioRef.current = null;
       }
     };
   }, []);
+
+  const stopIntroAudio = () => {
+    const intro = introAudioRef.current;
+    if (!intro) return;
+    intro.pause();
+    intro.src = "";
+    introAudioRef.current = null;
+  };
 
   const launchConfetti = () => {
     void getConfetti().then((confetti) => {
@@ -93,19 +129,17 @@ export function WelcomeOverlay() {
     });
   };
 
-  const playCeremonyAudio = async () => {
+  const playCutAudio = async () => {
     try {
-      const audio = new Audio(CEREMONY_AUDIO_URL);
+      const audio = new Audio(CUT_AUDIO_URL);
       audio.volume = 1;
-      audioRef.current = audio;
+      cutAudioRef.current = audio;
       await audio.play();
-    } catch {
-      /* host may block hotlink — silent fail, visuals still play */
-    }
+    } catch { /* browser may block — visuals still play */ }
   };
 
-  const stopCeremonyAudio = () => {
-    const audio = audioRef.current;
+  const stopCutAudio = () => {
+    const audio = cutAudioRef.current;
     if (!audio) return;
     const startedAt = performance.now();
     const fadeTick = () => {
@@ -127,7 +161,8 @@ export function WelcomeOverlay() {
     if (phase !== "idle") return;
     try {
       setPhase("snipping");
-      void playCeremonyAudio();
+      stopIntroAudio();
+      void playCutAudio();
       snipTimerRef.current = window.setTimeout(() => {
         snipTimerRef.current = null;
         try {
@@ -135,18 +170,17 @@ export function WelcomeOverlay() {
           launchConfetti();
           closeTimerRef.current = window.setTimeout(() => {
             closeTimerRef.current = null;
-            try {
-              stopCeremonyAudio();
-            } catch {
-              /* ignore */
-            }
+            try { stopCutAudio(); } catch { /* ignore */ }
+            revealPage();
             setOpen(false);
           }, CEREMONY_PLAY_MS);
         } catch {
+          revealPage();
           setOpen(false);
         }
       }, 520);
     } catch {
+      revealPage();
       setOpen(false);
     }
   };
@@ -154,7 +188,11 @@ export function WelcomeOverlay() {
   const cutting = phase === "cutting";
   const snipping = phase === "snipping";
 
-  return (
+  const overlayRoot =
+    typeof document !== "undefined" ? document.getElementById("overlay-root") : null;
+  if (!overlayRoot) return null;
+
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -242,7 +280,8 @@ export function WelcomeOverlay() {
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    overlayRoot,
   );
 }
 
@@ -343,10 +382,6 @@ function Ribbon({
   );
 }
 
-/**
- * Golden scissors with two independently-rotating blade groups around the pivot.
- * Snip animation: blades close (rotate to 0°), open, close, open — quick double snip.
- */
 function GoldenScissors({ snipping }: { snipping: boolean }) {
   const OPEN_TOP = -10;
   const OPEN_BOT = 10;
@@ -383,24 +418,15 @@ function GoldenScissors({ snipping }: { snipping: boolean }) {
         </linearGradient>
       </defs>
 
-      {/* Top blade + handle (rotates around pivot 70,50) */}
+      {/* Top blade + handle */}
       <motion.g
         style={{ originX: "70px", originY: "50px" }}
         animate={topAnimate}
         transition={snipping ? snipTransition : { duration: 0.3, ease: "easeOut" }}
       >
-        {/* finger ring */}
         <circle cx="20" cy="32" r="13" stroke="url(#goldGrad)" strokeWidth="5" fill="none" />
         <circle cx="20" cy="32" r="9" stroke="#92400e" strokeWidth="1" fill="none" opacity="0.4" />
-        {/* arm from ring to pivot */}
-        <path
-          d="M 30 38 Q 50 44 70 50"
-          stroke="url(#goldGrad)"
-          strokeWidth="6"
-          strokeLinecap="round"
-          fill="none"
-        />
-        {/* blade */}
+        <path d="M 30 38 Q 50 44 70 50" stroke="url(#goldGrad)" strokeWidth="6" strokeLinecap="round" fill="none" />
         <path d="M 70 50 L 152 36 L 156 44 L 72 54 Z" fill="url(#bladeGrad)" />
         <path d="M 72 52 L 152 39" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
       </motion.g>
@@ -413,13 +439,7 @@ function GoldenScissors({ snipping }: { snipping: boolean }) {
       >
         <circle cx="20" cy="68" r="13" stroke="url(#goldGrad)" strokeWidth="5" fill="none" />
         <circle cx="20" cy="68" r="9" stroke="#92400e" strokeWidth="1" fill="none" opacity="0.4" />
-        <path
-          d="M 30 62 Q 50 56 70 50"
-          stroke="url(#goldGrad)"
-          strokeWidth="6"
-          strokeLinecap="round"
-          fill="none"
-        />
+        <path d="M 30 62 Q 50 56 70 50" stroke="url(#goldGrad)" strokeWidth="6" strokeLinecap="round" fill="none" />
         <path d="M 70 50 L 152 64 L 156 56 L 72 46 Z" fill="url(#bladeGrad)" />
         <path d="M 72 48 L 152 61" stroke="rgba(255,255,255,0.6)" strokeWidth="1" />
       </motion.g>

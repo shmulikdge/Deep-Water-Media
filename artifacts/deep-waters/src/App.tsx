@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Switch, Route, Router as WouterRouter, useLocation } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/lib/LanguageContext";
 import { CookieBanner } from "@/components/CookieBanner";
 import { BackToTop } from "@/components/BackToTop";
 import { HearTheCanyon } from "@/components/HearTheCanyon";
+import { WelcomeOverlay } from "@/components/WelcomeOverlay";
 
 import Home from "@/pages/Home";
 
@@ -20,9 +21,6 @@ const GuideArticlePage = lazy(() => import("@/pages/GuideArticlePage"));
 const AdventureGame = lazy(() => import("@/pages/AdventureGame"));
 const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage"));
 const TermsPage = lazy(() => import("@/pages/TermsPage"));
-const WelcomeOverlay = lazy(() =>
-  import("@/components/WelcomeOverlay").then((m) => ({ default: m.WelcomeOverlay })),
-);
 
 const queryClient = new QueryClient();
 
@@ -98,25 +96,6 @@ function Router() {
 }
 
 function App() {
-  const [showOverlay, setShowOverlay] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    let id: number;
-    if (typeof window.requestIdleCallback !== "undefined") {
-      id = window.requestIdleCallback(() => setShowOverlay(true), { timeout: 1500 }) as unknown as number;
-    } else {
-      id = window.setTimeout(() => setShowOverlay(true), 500);
-    }
-    return () => {
-      if (typeof window.requestIdleCallback !== "undefined") {
-        window.cancelIdleCallback(id);
-      } else {
-        window.clearTimeout(id);
-      }
-    };
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
@@ -127,11 +106,7 @@ function App() {
             <CookieBanner />
             <BackToTop />
           </WouterRouter>
-          {showOverlay && (
-            <Suspense fallback={null}>
-              <WelcomeOverlay />
-            </Suspense>
-          )}
+          <WelcomeOverlay />
           <Toaster />
         </TooltipProvider>
       </LanguageProvider>

@@ -132,6 +132,17 @@
   --ring: 180 50% 30%;
 }
 
+/* Grand-opening: hide #root until the ribbon is cut.
+   The inline script in index.html adds this class synchronously before
+   React renders, so users see zero flash of site content on first visit. */
+html.grand-opening-active #root {
+  opacity: 0;
+  pointer-events: none;
+}
+#root {
+  transition: opacity 1.4s ease;
+}
+
 @keyframes hero-fade {
   from { opacity: 0; transform: translateY(30px); }
   to   { opacity: 1; transform: translateY(0); }
