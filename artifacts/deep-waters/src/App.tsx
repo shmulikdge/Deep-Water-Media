@@ -7,8 +7,6 @@ import { LanguageProvider } from "@/lib/LanguageContext";
 import { CookieBanner } from "@/components/CookieBanner";
 import { BackToTop } from "@/components/BackToTop";
 import { HearTheCanyon } from "@/components/HearTheCanyon";
-import { WelcomeOverlay } from "@/components/WelcomeOverlay";
-
 import Home from "@/pages/Home";
 
 const NotFound = lazy(() => import("@/pages/not-found"));
@@ -106,7 +104,6 @@ function App() {
             <CookieBanner />
             <BackToTop />
           </WouterRouter>
-          <WelcomeOverlay />
           <Toaster />
         </TooltipProvider>
       </LanguageProvider>
